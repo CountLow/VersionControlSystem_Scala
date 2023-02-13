@@ -5,6 +5,10 @@ import java.nio.*
 import scala.jdk.CollectionConverters.*
 
 class VCS:
+  enum Operation:
+    case Insertion
+    case Deletion
+
   def generateDiffForFile(pathA : String, pathB : String) =
   {
     val fileInputA: FileInputStream = FileInputStream(getClass.getResource(pathA).getFile)
@@ -14,8 +18,15 @@ class VCS:
     val bufferedReaderB : BufferedReader = BufferedReader(InputStreamReader(fileInputB))
 
     val result : List[(Int, Int)] = findDifferences(bufferedReaderA, bufferedReaderB)
-    println(result)
+//    val processedDifference = processDiff(result)
+    print(result)
+
   }
+
+//  def processDiff(indexDifferences : List[(Int, Int)]) : List[(Int, Int, Operation)] =
+//    {
+//
+//    }
 
   def findDifferences(streamA : BufferedReader, streamB : BufferedReader) : List[(Int, Int)]=
   {
@@ -25,6 +36,7 @@ class VCS:
     var indexes : List[(Int, Int)] = List()
     indexes = indexes :+ (0,0)
 
+    streamB.mark(1000000)
     var A : String = streamA.readLine()
     var B : String = streamB.readLine()
 
@@ -32,12 +44,12 @@ class VCS:
       // Increase both indexes by 1
       if (A == B) {
         indexes = indexes :+ (indexes.last._1 + 1, indexes.last._2 + 1)
+        streamB.mark(1000000)
       }
 
       // Search for next occurrence
       else
       {
-        streamB.mark(10000)
         B = streamB.readLine()
         var indexDifference : Int = 1
 
@@ -48,9 +60,10 @@ class VCS:
           }
 
         //Insertion
-        if(B != null) {
+        if(B != null || (A == null && B == null)) {
           indexes = indexes :+ (indexes.last._1, indexes.last._2 + indexDifference)
           println("Insertion")
+          streamB.mark(1000000)
 
         }
         //Deletion
@@ -62,8 +75,8 @@ class VCS:
       }
 
       A = streamA.readLine()
-      if (B != null)
-        B = streamB.readLine()
+      //if (B != null)
+      B = streamB.readLine()
     }
 
     return indexes
