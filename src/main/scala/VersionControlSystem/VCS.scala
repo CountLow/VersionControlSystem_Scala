@@ -5,10 +5,6 @@ import java.nio.*
 import scala.jdk.CollectionConverters.*
 
 class VCS:
-  enum Operation:
-    case Insertion
-    case Deletion
-
   def generateDiffForFile(pathA : String, pathB : String) =
   {
     val fileInputA: FileInputStream = FileInputStream(getClass.getResource(pathA).getFile)
@@ -18,14 +14,38 @@ class VCS:
     val bufferedReaderB : BufferedReader = BufferedReader(InputStreamReader(fileInputB))
 
     val result : List[(Int, Int)] = findDifferences(bufferedReaderA, bufferedReaderB)
-//    val processedDifference = processDiff(result)
     print(result)
 
+    print("Current reader: " + fileInputA.read())
   }
 
-//  def processDiff(indexDifferences : List[(Int, Int)]) : List[(Int, Int, Operation)] =
+  /*
+  Generates instance of Diff from list of indexes.
+  Insertion: Save row index of base file and data to be inserted.
+  Deletion:  Save row index of base file.
+
+  Ignore indexes indicating no change.
+  */
+//  def generateDiff(indexDifferences : List[(Int, Int)]) : Diff =
 //    {
+//      var diff : Diff = Diff()
 //
+//      var prevIndexPair : (Int, Int) = indexDifferences.head
+//
+//      for
+//        currentIndexPair <- indexDifferences
+//      do
+//        val differences : (Int, Int) = (currentIndexPair._1 - prevIndexPair._1, currentIndexPair._2 - prevIndexPair._2)
+//        prevIndexPair = currentIndexPair
+//
+//        if(differences._1 > differences._2) // Insertion
+//        {
+//
+//        }
+//        else if(differences._1 < differences._2) // Deletion
+//        {
+//
+//        }
 //    }
 
   def findDifferences(streamA : BufferedReader, streamB : BufferedReader) : List[(Int, Int)]=
