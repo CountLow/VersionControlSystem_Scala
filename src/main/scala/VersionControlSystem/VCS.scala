@@ -127,3 +127,16 @@ class VCS(val sourcePath : String):
     new File(sourcePath + "/.vcss/commits").mkdirs()
 
   }
+
+  /*
+  DEBUG FEATURE
+  */
+  def testFeature() =
+  {
+    val diff: Diff = generateDiffForFile("C:/ExampleData/code1.scala", "C:/ExampleData/code2.scala")
+    diff.saveAsFile(sourcePath + "/.vcss", "Test")
+
+    val diff2 : Diff = new Diff()
+    diff2.loadFromFile(sourcePath + "/.vcss", "Test")
+    println(diff2.getString())
+  }

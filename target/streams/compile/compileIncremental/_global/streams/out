@@ -2,5 +2,31 @@
 [debug] IncrementalCompile.incrementalCompile
 [debug] previous = Stamps for: 8 products, 4 sources, 2 libraries
 [debug] current source = Set(${BASE}/src/main/scala/main.scala, ${BASE}/src/main/scala/VersionControlSystem/Commit.scala, ${BASE}/src/main/scala/VersionControlSystem/Diff.scala, ${BASE}/src/main/scala/VersionControlSystem/VCS.scala)
-[debug] > initialChanges = InitialChanges(Changes(added = Set(), removed = Set(), changed = Set(), unmodified = ...),Set(),Set(),API Changes: Set())
-[debug] No changes
+[debug] > initialChanges = InitialChanges(Changes(added = Set(), removed = Set(), changed = Set(${BASE}/src/main/scala/VersionControlSystem/Diff.scala), unmodified = ...),Set(),Set(),API Changes: Set())
+[debug] 
+[debug] Initial source changes:
+[debug] 	removed: Set()
+[debug] 	added: Set()
+[debug] 	modified: Set(${BASE}/src/main/scala/VersionControlSystem/Diff.scala)
+[debug] Invalidated products: Set()
+[debug] External API changes: API Changes: Set()
+[debug] Modified binary dependencies: Set()
+[debug] Initial directly invalidated classes: Set(VersionControlSystem.Diff)
+[debug] Sources indirectly invalidated by:
+[debug] 	product: Set()
+[debug] 	binary dep: Set()
+[debug] 	external source: Set()
+[debug] All initially invalidated classes: Set(VersionControlSystem.Diff)
+[debug] All initially invalidated sources:Set(${BASE}/src/main/scala/VersionControlSystem/Diff.scala)
+[debug] Initial set of included nodes: VersionControlSystem.Diff
+[debug] compilation cycle 1
+[info] compiling 1 Scala source to C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes ...
+[debug] Returning already retrieved and compiled bridge: C:\Users\matti\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala3-sbt-bridge\3.2.2\scala3-sbt-bridge-3.2.2.jar.
+[debug] [zinc] Running cached compiler 3bcca2da for Scala Compiler version 3.2.2
+[debug] [zinc] The Scala compiler is invoked with:
+[debug] 	-bootclasspath
+[debug] 	C:\Users\matti\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala3-library_3\3.2.2\scala3-library_3-3.2.2.jar;C:\Users\matti\AppData\Local\Coursier\Cache\v1\https\repo1.maven.org\maven2\org\scala-lang\scala-library\2.13.10\scala-library-2.13.10.jar
+[debug] 	-classpath
+[debug] 	C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes
+[debug] Compilation failed
+[error] (Compile / compileIncremental) Compilation failed

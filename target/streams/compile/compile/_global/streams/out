@@ -1,2 +1,11 @@
 [debug] Acquiring lock on file C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\project\target\.sbt-compilation-infos\root-compile\.sbt-idea-lock ...
+[error] -- [E007] Type Mismatch Error: C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\src\main\scala\VersionControlSystem\Diff.scala:31:34 
+[error] 31 |    changes = result.asInstanceOf(List[(Int, Operation, String)])
+[error]    |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[error]    |        Found:    Seq[(Int, VersionControlSystem.Operation, String)] => 
+[error]    |          List[(Int, VersionControlSystem.Operation, String)]
+[error]    |        Required: Int
+[error]    |
+[error]    | longer explanation available when compiling with `-explain`
+[error] one error found
 [debug] Releasing lock on file C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\project\target\.sbt-compilation-infos\root-compile\.sbt-idea-lock.

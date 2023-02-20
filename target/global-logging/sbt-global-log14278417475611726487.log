@@ -1,0 +1,18 @@
+[debug] > Exec(all {file:/C:/Users/matti/IdeaProjects/VersionControlSystem_Scala/}root/products {file:/C:/Users/matti/IdeaProjects/VersionControlSystem_Scala/}root/test:products, None, None)
+[debug] Evaluating tasks: Compile / products, Test / products
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 1 Scala source to C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes ...
+[error] -- [E007] Type Mismatch Error: C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\src\main\scala\VersionControlSystem\Diff.scala:31:34 
+[error] 31 |    changes = result.asInstanceOf(List[(Int, Operation, String)])
+[error]    |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[error]    |        Found:    Seq[(Int, VersionControlSystem.Operation, String)] => 
+[error]    |          List[(Int, VersionControlSystem.Operation, String)]
+[error]    |        Required: Int
+[error]    |
+[error]    | longer explanation available when compiling with `-explain`
+[error] one error found
+[error] (Compile / compileIncremental) Compilation failed
+[error] Total time: 2 s, completed 20.02.2023, 20:31:26
+[debug] > Exec(idea-shell, None, None)
+[debug] > Exec(, None, None)
+[debug] > Exec(idea-shell, None, None)

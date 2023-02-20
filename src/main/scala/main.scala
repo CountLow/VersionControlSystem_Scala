@@ -11,8 +11,8 @@ object VCS_S {
     else args(0) match
       case "init" => vcs.initializeVCS()
       case "path" => println(path)
+      case "testFeature" => vcs.testFeature()
       case _ => printHelp()
-
   }
 
   private def printHelp() : Unit = {

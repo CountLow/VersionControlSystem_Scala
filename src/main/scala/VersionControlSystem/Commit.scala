@@ -18,12 +18,12 @@ class Commit:
 
   }
 
-  def saveToFile(path : String, name : String) : Unit =
+  def saveToFile(sourcePath : String, name : String) : Unit =
   {
 
   }
 
-  def loadFromFile(path : String, name : String) : Unit =
+  def loadFromFile(sourcePath : String, name : String) : Unit =
   {
 
   }
