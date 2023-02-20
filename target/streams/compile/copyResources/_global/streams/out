@@ -1,8 +1,3 @@
 [debug] Copy resource mappings: 
 [debug] 	(C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\src\main\resources\code1.scala,C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\code1.scala)
 [debug] 	(C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\src\main\resources\code2.scala,C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\code2.scala)
-[debug] 	(C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\src\main\resources\empty.txt,C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\empty.txt)
-[debug] 	(C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\src\main\resources\img1.jpg,C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\img1.jpg)
-[debug] 	(C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\src\main\resources\img2.jpg,C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\img2.jpg)
-[debug] 	(C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\src\main\resources\Text1.txt,C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\Text1.txt)
-[debug] 	(C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\src\main\resources\Text2.txt,C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\Text2.txt)

@@ -1,6 +1,6 @@
 package VersionControlSystem
 
-import java.io.{BufferedReader, FileWriter}
+import java.io.{BufferedReader, File, FileWriter}
 
 enum Operation:
   case Insertion
@@ -9,7 +9,7 @@ enum Operation:
 /*
   Class containing the main functionality of the Version Control System
 */
-class VCS:
+class VCS(val sourcePath : String):
   /*
     Finds the differences between two versions of the same file.
     The found differences are saved as instance of the 'Diff' class.
@@ -57,9 +57,9 @@ class VCS:
   }
 
   /*
-
+    Applies all changes of a diff to a base file.
   */
-  def applyDiffOnFile(path : String, diff : Diff) =
+  def applyDiffOnFile(path : String, diff : Diff) : Unit =
   {
     val bufferedReader : BufferedReader = io.Source.fromFile(path).bufferedReader()
     val stringBuffer : StringBuffer = new StringBuffer()
@@ -103,4 +103,27 @@ class VCS:
     val fileWriter : FileWriter = new FileWriter(path)
     fileWriter.write(stringBuffer.toString)
     fileWriter.close()
+  }
+
+  /*
+    Creates the folder structure
+  */
+  def initializeVCS() : Unit =
+  {
+    // Create version history if doesn't already exist
+    val versionHistoryFile : File = new File(sourcePath + "/.vcss/versionHistory")
+    if(versionHistoryFile.exists())
+    {
+      println("Repository already initialized!")
+      return
+    }
+
+    val fileWriter : FileWriter = new FileWriter(sourcePath + "/.vcss/versionHistory")
+    versionHistoryFile.createNewFile()
+    fileWriter.write("Base commit #000000")
+    fileWriter.close()
+
+    // Create commit directory
+    new File(sourcePath + "/.vcss/commits").mkdirs()
+
   }

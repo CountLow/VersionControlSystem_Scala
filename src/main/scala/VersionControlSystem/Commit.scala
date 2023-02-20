@@ -8,22 +8,22 @@ class Commit:
   private val directoryPath : String = ""
   private val diffs : List[Diff] = List()
 
-  def applyCommit() =
+  def applyCommit() : Unit =
   {
 
   }
 
-  def applyDiff() =
+  def applyDiff() : Unit =
   {
 
   }
 
-  def saveToFile() =
+  def saveToFile(path : String, name : String) : Unit =
   {
 
   }
 
-  def loadFromFile() =
+  def loadFromFile(path : String, name : String) : Unit =
   {
 
   }

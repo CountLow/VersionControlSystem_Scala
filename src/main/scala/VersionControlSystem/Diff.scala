@@ -9,12 +9,12 @@ class Diff:
   private val pathToFile : String = ""
   private var changes : List[(Int, Operation, String)] = List()
 
-  def saveAsFile() =
+  def saveAsFile(path : String, name : String) : Unit =
   {
-
+    
   }
 
-  def loadFromFile() =
+  def loadFromFile(path : String, name : String) : Unit =
   {
 
   }

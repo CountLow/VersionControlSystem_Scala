@@ -1,7 +1,2 @@
 [debug] Acquiring lock on file C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\project\target\.sbt-compilation-infos\root-compile\.sbt-idea-lock ...
-[error] -- Error: C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\src\main\scala\main.scala:4:0 
-[error] 4 |@main
-[error]   |^
-[error]   |No given instance of type scala.util.CommandLineParser.FromString[Array[String]] was found for parameter fs of method parseArgument in object CommandLineParser
-[error] one error found
 [debug] Releasing lock on file C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\project\target\.sbt-compilation-infos\root-compile\.sbt-idea-lock.
