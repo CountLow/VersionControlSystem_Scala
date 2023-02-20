@@ -71,29 +71,33 @@ class VCS:
     var lineNumber : Int = 0
     var lineContent : String = ""
 
-    while(lineContent != null)
+    while(lineContent != null || lineNumber <= index)
     {
+      // Add new content if at index and operation is insertion
       if(lineNumber == index && operation == Operation.Insertion)
-      {
-        stringBuffer.append(content)
-        stringBuffer.append("\n")
-      }
+        stringBuffer.append(content + "\n")
 
-      if((lineNumber != index || operation != Operation.Deletion) && lineNumber != 0)
-      {
-        stringBuffer.append(lineContent)
-        stringBuffer.append("\n")
-      }
-      else if(lineNumber == index)
-      {
-        index = if (changes != null) changes.head._1 else -1
-        operation = if (changes != null) changes.head._2 else Operation.Deletion
-        content = if (changes != null) changes.head._3 else ""
-        changes = changes.tail
-      }
+      // Add old content if not yet at index or operation is deletion (but not if first line)
+      if((lineNumber != index || operation != Operation.Deletion) && lineNumber != 0 && lineContent != null)
+        stringBuffer.append(lineContent + "\n")
 
-      lineNumber += 1
-      lineContent = bufferedReader.readLine()
+      // Load next change
+      if(lineNumber == index)
+      {
+        // Load next line
+        lineNumber += 1
+        lineContent = bufferedReader.readLine()
+
+        index = if (changes.nonEmpty) changes.head._1 else -1
+        operation = if (changes.nonEmpty) changes.head._2 else Operation.Deletion
+        content = if (changes.nonEmpty) changes.head._3 else ""
+        changes = if (changes.nonEmpty) changes.tail else changes
+      }
+      else
+      {
+        lineNumber += 1
+        lineContent = bufferedReader.readLine()
+      }
     }
 
     val fileWriter : FileWriter = new FileWriter(path)
