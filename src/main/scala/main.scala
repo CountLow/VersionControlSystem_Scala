@@ -1,21 +1,23 @@
 import VersionControlSystem.VCS
 import VersionControlSystem.Diff
 
-@main
-def main(): Unit = {
-  val vcs : VCS = VCS()
-  println("VCS started!")
+object VCS_S {
+  def main(args: Array[String]) = {
+    if (args.length == 0)
+      println("Possible commands:")
+    else if (args.length == 3){
+      // Test setup for creating and applying diff
+      val pathA : String = args(0)
+      val pathB : String = args(1)
+      val pathC : String = args(2)
 
-  val fileNameA = "/code1.scala"
-  val fileNameB = "/code2.scala"
-//  val fileNameA = "/Text1.txt"
-//  val fileNameB = "/Text2.txt"
-//  val fileNameA = "/img1.jpg"
-//  val fileNameB = "/img2.jpg"
+      val vcs: VCS = VCS()
+      val result: Diff = vcs.generateDiffForFile(pathA, pathB)
+      print(result.getString())
 
-  val pathA: String = getClass.getResource(fileNameA).getFile
-  val pathB: String = getClass.getResource(fileNameB).getFile
-
-  val result : Diff = vcs.generateDiffForFile(pathA, pathB)
-  print(result.getChanges())
+      vcs.applyDiffOnFile(pathC, result)
+    }
+    else
+      println("Enter sourceA, sourceB, destA as arguments")
+  }
 }

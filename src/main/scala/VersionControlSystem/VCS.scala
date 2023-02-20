@@ -1,6 +1,6 @@
 package VersionControlSystem
 
-import java.io.BufferedReader
+import java.io.{BufferedReader, FileWriter}
 
 enum Operation:
   case Insertion
@@ -54,4 +54,49 @@ class VCS:
     }
 
     diff
+  }
+
+  /*
+
+  */
+  def applyDiffOnFile(path : String, diff : Diff) =
+  {
+    val bufferedReader : BufferedReader = io.Source.fromFile(path).bufferedReader()
+    val stringBuffer : StringBuffer = new StringBuffer()
+    
+    var changes : List[(Int, Operation, String)] = diff.getChanges()
+    var (index, operation, content) : (Int, Operation, String) = changes.head
+    changes = changes.tail
+
+    var lineNumber : Int = 0
+    var lineContent : String = ""
+
+    while(lineContent != null)
+    {
+      if(lineNumber == index && operation == Operation.Insertion)
+      {
+        stringBuffer.append(content)
+        stringBuffer.append("\n")
+      }
+
+      if((lineNumber != index || operation != Operation.Deletion) && lineNumber != 0)
+      {
+        stringBuffer.append(lineContent)
+        stringBuffer.append("\n")
+      }
+      else if(lineNumber == index)
+      {
+        index = if (changes != null) changes.head._1 else -1
+        operation = if (changes != null) changes.head._2 else Operation.Deletion
+        content = if (changes != null) changes.head._3 else ""
+        changes = changes.tail
+      }
+
+      lineNumber += 1
+      lineContent = bufferedReader.readLine()
+    }
+
+    val fileWriter : FileWriter = new FileWriter(path)
+    fileWriter.write(stringBuffer.toString)
+    fileWriter.close()
   }

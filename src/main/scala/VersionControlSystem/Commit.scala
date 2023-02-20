@@ -18,4 +18,14 @@ class Commit:
 
   }
 
+  def saveToFile() =
+  {
+
+  }
+
+  def loadFromFile() =
+  {
+
+  }
+
 

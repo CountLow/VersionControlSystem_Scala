@@ -29,7 +29,12 @@ class Diff:
       changes = changes :+ (index, operation, c)
   }
 
-  def getChanges() : String =
+  def getString() : String =
   {
     return changes.mkString("\n")
+  }
+
+  def getChanges() : List[(Int, Operation, String)] =
+  {
+    return changes
   }
