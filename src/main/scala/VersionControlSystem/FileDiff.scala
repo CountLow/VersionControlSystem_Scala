@@ -5,7 +5,7 @@ import java.io.{FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutp
 /*
   Class representing the change of a single file between two versions.
 */
-class Diff:
+class FileDiff:
   private var changes : List[(Int, Operation, String)] = List()
 
   def addChange(index : Int, operation : Operation, content : String) : Unit =

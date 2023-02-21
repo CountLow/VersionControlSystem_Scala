@@ -1,6 +1,7 @@
 package VersionControlSystem
 
 import java.io.{BufferedReader, File, FileWriter}
+import collection.mutable.Set
 
 enum Operation:
   case Insertion
@@ -11,7 +12,16 @@ enum Operation:
   The parameter 'sourcePath' specifies the root of the repository.
 */
 class VCS(val sourcePath : String):
-  private val stagingArea : Seq[String] = Seq()
+  private var latestCommit : Commit = loadLatestCommit()
+  private var stagingArea : List[FileDiff] = List()
+
+  /*
+
+  */
+  private def loadLatestCommit() : Commit =
+  {
+    null
+  }
 
   /*
     Finds the differences between two versions of the same file.
@@ -20,8 +30,8 @@ class VCS(val sourcePath : String):
     INFO:
     A practical search length before aborting has to be determined.
   */
-  def generateDiffForFile(pathA : String, pathB : String) : Diff = {
-    val diff : Diff = Diff()
+  def generateDiffForFile(pathA : String, pathB : String) : FileDiff = {
+    val diff : FileDiff = FileDiff()
     val bufferedReaderA : BufferedReader =  io.Source.fromFile(pathA).bufferedReader()
     val bufferedReaderB : BufferedReader =  io.Source.fromFile(pathB).bufferedReader()
     var index : Int = 0
@@ -62,7 +72,7 @@ class VCS(val sourcePath : String):
   /*
     Applies all changes of a diff to a base file.
   */
-  def applyDiffOnFile(path : String, diff : Diff) : Unit =
+  def applyDiffOnFile(path : String, diff : FileDiff) : Unit =
   {
     val bufferedReader : BufferedReader = io.Source.fromFile(path).bufferedReader()
     val stringBuffer : StringBuffer = new StringBuffer()
@@ -143,13 +153,50 @@ class VCS(val sourcePath : String):
       path <- paths
     do
       val data = new File(path)
-      println(data.exists())
+
+      if(data.exists())
+      {
+        if(data.isDirectory) // Add all files in directory to staging area
+        {
+
+        }
+        else if(data.isFile)
+        {
+          // Check if file already exists in last commit or is new
+          // Add NEW_FILE_DIFF or add diff of file content
+
+          // If file already existed we have to apply all diffs on base version to find diff
+        }
+      }
+  }
+
+  /*
+
+  */
+  def commitChanges() =
+  {
+    /*if(latestCommit == null) // Create base commit
+    {
+
+    }
+    else
+    {
+
+    }*/
+
+    // DON'T do it like this!
+    // Represent no commit as empty
+    // => First commit then also represent only changes
+
+    val commit : Commit = Commit()
+
   }
 
   /*
   DEBUG FEATURE
   */
-  def testFeature() =
+  def testFeature(args : Array[String]) =
   {
-
+    val structureDiff : StructureDiff = StructureDiff()
+    structureDiff.generateDiff(args(0))
   }

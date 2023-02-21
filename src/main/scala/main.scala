@@ -11,7 +11,7 @@ object VCS_S {
     else args(0) match
       case "init" => vcs.initializeVCS()
       case "path" => println(path)
-      case "testFeature" => vcs.testFeature()
+      case "testFeature" => vcs.testFeature(args.drop(1))
       case "stage" => vcs.stage(args.drop(1))
       case _ => printHelp()
   }
@@ -20,7 +20,8 @@ object VCS_S {
     println("Possible commands:")
     println("   init                            Initialize vcss for this folder")
     println("   diff [PATH]                     Show the differences for a file")
-    println("   stage [PATH_A] [PATH_B] [...]   Stages specified files for commit")
+    println("   stage [PATH_A] [PATH_B] [...]   Stage specified files for commit")
+    println("   commit                          Commit all staged changes to create a new version")
     println("   ")
   }
 }
