@@ -2,10 +2,13 @@ package VersionControlSystem
 
 import java.io.{BufferedReader, File, FileWriter}
 import collection.mutable.Set
+import collection.mutable.Stack
+
 
 enum Operation:
   case Insertion
   case Deletion
+
 
 /*
   Class containing the main functionality of the Version Control System.
@@ -190,6 +193,76 @@ class VCS(val sourcePath : String):
 
     val commit : Commit = Commit()
 
+  }
+  /*
+    Generates the difference between two folders/directories
+    e.g. wether there are new files since the last commit
+
+    Returns a List of Tupels with Filename and the according Diffs
+  */
+  def generateDiffForAllFiles(path : String, previousPath : String) : List[(String, FileDiff)] = {
+
+    val dir : File = new File(path)
+    val previousdir : File = new File(previousPath)
+    var dict : Stack[File] = Stack(dir)
+    var pdict : Stack[File] = Stack(previousdir)
+    //List of all files in path directory and their names
+    var files : List[File] = List()
+    var filesname : List[String] = List()
+    //List of all files in previous directory and their names
+    var pfiles : List[File] = List()
+    var pfilesname : List[String] = List()
+
+    while(dict.nonEmpty) {
+
+      if (dict.top.isFile) {
+        val temp: File = dict.pop
+        files = temp :: files
+        filesname = temp.getName :: filesname
+      }
+      else if (dict.top.isDirectory) {
+        dict.pushAll(dict.pop.listFiles())
+      }
+      else
+        dict.pop()
+    }
+    while (pfiles.nonEmpty) {
+
+      if (pdict.top.isFile) {
+        val temp2 : File = pdict.pop
+        pfiles = temp2 :: pfiles
+        pfilesname = temp2.getName :: pfilesname
+      }
+      else if (pdict.top.isDirectory) {
+        pdict.pushAll(pdict.pop.listFiles())
+      }
+      else
+        pdict.pop()
+    }
+    // find common filenames, every other file was either added or deleted
+
+    files = files.toList
+    pfiles = pfiles.toList
+    val common : List[String] =  for name <- filesname if pfilesname.contains(name) yield name
+
+    var diff : List[(String, FileDiff)] = List()
+
+
+    // every file in the current directory look for file in previous directory
+    for
+      x <- files
+    do
+      if (common.contains(x.getName())) {
+        for
+          y <- pfiles
+        do
+          if (x.getName == y.getName) {
+            //save Path of x, so applyDiffOnFile can be called eventually
+            diff = (x.getPath, generateDiffForFile(x.getPath, y.getPath)) :: diff
+          }
+      }
+
+    diff
   }
 
   /*
