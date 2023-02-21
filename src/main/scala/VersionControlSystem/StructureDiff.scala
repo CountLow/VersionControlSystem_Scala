@@ -3,9 +3,11 @@ package VersionControlSystem
 import java.io.*
 import collection.mutable.Stack
 import collection.mutable.Set
-import scala.collection.Searching
 
-class StructureDiff(val previousDiff : StructureDiff = null) {
+/*
+  Represents changes in folder structure.
+*/
+class StructureDiff(val sourcePath : String, val previousDiff : StructureDiff = null) {
   private var addedFiles : List[String] = List()
   private var deletedFiles : List[String] = List()
 
@@ -16,9 +18,9 @@ class StructureDiff(val previousDiff : StructureDiff = null) {
     Generates the version of StructureDiff 'previousDiff'.
     Then the difference to the current state is generated and saved.
   */
-  def generateDiff(path : String) =
+  def generateDiff() : Unit =
   {
-    val directory : File = new File(path)
+    val directory : File = new File(sourcePath)
     val childrenFilePaths : Set[String] = Set()
     val childrenDirectoryPaths : Set[String] = Set()
     val (currentFiles, currentDirectories) : (Set[String], Set[String]) = generateVersion(previousDiff)
@@ -44,7 +46,6 @@ class StructureDiff(val previousDiff : StructureDiff = null) {
 
     deletedFiles = currentFiles.toList.diff(childrenFilePaths.toList)
     deletedDirectories = currentDirectories.toList.diff(childrenDirectoryPaths.toList)
-
   }
 
   /*
@@ -84,9 +85,25 @@ class StructureDiff(val previousDiff : StructureDiff = null) {
       for(dF <- currentDiff.deletedFiles)
         currentFiles.remove(dF)
 
+      // Replace by diff
+
       currentDiff = if (stack.nonEmpty) stack.pop else null
     }
 
     (currentFiles, currentDictionaries)
   }
+
+  /*
+
+  */
+  def getString() : String =
+  {
+    val sB : StringBuilder = StringBuilder("")
+    sB ++= addedDirectories.map(f => "\tAdded:\t\t" + f).mkString("\n")
+    sB ++= deletedDirectories.map(f => "\tDeleted:\t\t" + f).mkString("\n")
+    sB ++= addedFiles.map(f => "\tAdded:\t\t" + f).mkString("\n")
+    sB ++= deletedFiles.map(f => "\tDeleted:\t\t" + f).mkString("\n")
+    sB.toString()
+  }
+
 }

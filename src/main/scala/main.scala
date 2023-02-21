@@ -13,6 +13,7 @@ object VCS_S {
       case "path" => println(path)
       case "testFeature" => vcs.testFeature(args.drop(1))
       case "stage" => vcs.stage(args.drop(1))
+      case "status" => vcs.status()
       case _ => printHelp()
   }
 

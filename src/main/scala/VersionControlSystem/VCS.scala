@@ -1,7 +1,6 @@
 package VersionControlSystem
 
 import java.io.{BufferedReader, File, FileWriter}
-import collection.mutable.Set
 
 enum Operation:
   case Insertion
@@ -144,6 +143,28 @@ class VCS(val sourcePath : String):
   }
 
   /*
+
+  */
+  def status() : Unit =
+  {
+    if(latestCommit == null)
+    {
+//      val fileDiffs: List[FileDiff] = latestCommit.fileDiffs
+      val structureDiff: StructureDiff = StructureDiff(sourcePath, null)
+      structureDiff.generateDiff()
+
+      print(structureDiff.getString())
+    }
+    else {
+      val fileDiffs: List[FileDiff] = latestCommit.fileDiffs
+      val structureDiff: StructureDiff = StructureDiff(sourcePath, latestCommit.structureDiff)
+      structureDiff.generateDiff()
+
+      print(structureDiff.getString())
+    }
+  }
+
+  /*
     Adds all changed files which are either directly specified or within a specified directory to the
     staging area.
   */
@@ -175,20 +196,9 @@ class VCS(val sourcePath : String):
   */
   def commitChanges() =
   {
-    /*if(latestCommit == null) // Create base commit
-    {
+    val commit : Commit = Commit(latestCommit)
+//    commit.
 
-    }
-    else
-    {
-
-    }*/
-
-    // DON'T do it like this!
-    // Represent no commit as empty
-    // => First commit then also represent only changes
-
-    val commit : Commit = Commit()
 
   }
 
@@ -197,6 +207,5 @@ class VCS(val sourcePath : String):
   */
   def testFeature(args : Array[String]) =
   {
-    val structureDiff : StructureDiff = StructureDiff()
-    structureDiff.generateDiff(args(0))
+    
   }

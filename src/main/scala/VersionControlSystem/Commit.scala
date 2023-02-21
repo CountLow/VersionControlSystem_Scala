@@ -8,7 +8,8 @@ import java.io.{FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutp
 */
 class Commit(val parent : Commit = null) extends Serializable:
   private val directoryPath : String = ""
-  private val diffs : List[FileDiff] = List()
+  val fileDiffs : List[FileDiff] = List()
+  val structureDiff : StructureDiff = null
 
   def applyCommit() : Unit =
   {
