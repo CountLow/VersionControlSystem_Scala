@@ -4,3 +4,8 @@
 .idea/**/dictionaries
 .idea/**/shelf
 target/
+.vcss/
+project/project/
+project/target/
+.tasty
+.vscode

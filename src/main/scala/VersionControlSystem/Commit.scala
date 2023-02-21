@@ -29,7 +29,7 @@ class Commit extends Serializable:
         oOS.close()
   }
 
-  def loadFromFile(sourcePath : String, name : String) : Unit =
+  def loadFromFile(sourcePath : String, name : String) : Commit =
   {
         val path = sourcePath + "/" + name + ".commit"
         val fIS : FileInputStream = new FileInputStream(path)
