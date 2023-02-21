@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/VersionControlSystem_Scala.iml" filepath="$PROJECT_DIR$/.idea/modules/VersionControlSystem_Scala.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/VersionControlSystem_Scala-build.iml" filepath="$PROJECT_DIR$/.idea/modules/VersionControlSystem_Scala-build.iml" />
     </modules>
   </component>
 </project>
