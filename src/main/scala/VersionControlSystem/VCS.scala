@@ -7,9 +7,12 @@ enum Operation:
   case Deletion
 
 /*
-  Class containing the main functionality of the Version Control System
+  Class containing the main functionality of the Version Control System.
+  The parameter 'sourcePath' specifies the root of the repository.
 */
 class VCS(val sourcePath : String):
+  private val stagingArea : Seq[String] = Seq()
+
   /*
     Finds the differences between two versions of the same file.
     The found differences are saved as instance of the 'Diff' class.
@@ -128,6 +131,19 @@ class VCS(val sourcePath : String):
     new File(sourcePath + "/.vcss/commits").mkdirs()
 
     println("Initialized vcss repository.")
+  }
+
+  /*
+    Adds all changed files which are either directly specified or within a specified directory to the
+    staging area.
+  */
+  def stage(paths : Array[String]) : Unit =
+  {
+    for
+      path <- paths
+    do
+      val data = new File(path)
+      println(data.exists())
   }
 
   /*

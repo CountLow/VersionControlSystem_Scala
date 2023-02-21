@@ -1,0 +1,8 @@
+[debug] > Exec(run stage build.sbt, None, None)
+[debug] Evaluating tasks: Compile / run
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] compiling 2 Scala sources to C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes ...
+[info] done compiling
+[debug] Forcing garbage collection...
+[success] Total time: 1 s, completed 21.02.2023, 12:15:36
+[debug] > Exec(idea-shell, None, None)

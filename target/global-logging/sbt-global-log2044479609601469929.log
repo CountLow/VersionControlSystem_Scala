@@ -1,9 +1,0 @@
-[debug] > Exec(all {file:/C:/Users/matti/IdeaProjects/VersionControlSystem_Scala/}root/products {file:/C:/Users/matti/IdeaProjects/VersionControlSystem_Scala/}root/test:products, None, None)
-[debug] Evaluating tasks: Compile / products, Test / products
-[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
-[info] compiling 1 Scala source to C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes ...
-[info] done compiling
-[success] Total time: 0 s, completed 21.02.2023, 11:27:27
-[debug] > Exec(idea-shell, None, None)
-[debug] > Exec(, None, None)
-[debug] > Exec(idea-shell, None, None)
