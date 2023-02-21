@@ -26,7 +26,7 @@
 [error] 	at java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:538)
 [error] 	at java.base/java.io.ObjectInputStream.readObject(ObjectInputStream.java:496)
 [error] 	at VersionControlSystem.Diff.loadFromFile(Diff.scala:30)
-[error] 	at VersionControlSystem.VCS.testFeature(VCS.scala:140)
+[error] 	at VersionControlSystem.VCS.testFeature(VCS.scala:142)
 [error] 	at VCS_S$.main(main.scala:14)
 [error] 	at VCS_S.main(main.scala)
 [error] 	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)

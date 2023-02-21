@@ -118,14 +118,16 @@ class VCS(val sourcePath : String):
       return
     }
 
-    val fileWriter : FileWriter = new FileWriter(sourcePath + "/.vcss/versionHistory")
+    new File(sourcePath + "/.vcss").mkdir()
     versionHistoryFile.createNewFile()
+    val fileWriter : FileWriter = new FileWriter(sourcePath + "/.vcss/versionHistory")
     fileWriter.write("Base commit #000000")
     fileWriter.close()
 
     // Create commit directory
     new File(sourcePath + "/.vcss/commits").mkdirs()
 
+    println("Initialized vcss repository.")
   }
 
   /*
@@ -133,10 +135,5 @@ class VCS(val sourcePath : String):
   */
   def testFeature() =
   {
-    val diff: Diff = generateDiffForFile("C:/ExampleData/code1.scala", "C:/ExampleData/code2.scala")
-    diff.saveAsFile(sourcePath + "/.vcss", "Test")
 
-    val diff2 : Diff = new Diff()
-    diff2.loadFromFile(sourcePath + "/.vcss", "Test")
-    println(diff2.getString())
   }

@@ -1,1 +1,35 @@
-[debug] Jar uptodate: C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\versioncontrolsystem_scala_3-0.1.0-SNAPSHOT.jar
+[debug] Packaging C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\versioncontrolsystem_scala_3-0.1.0-SNAPSHOT.jar ...
+[debug] Input file mappings:
+[debug] 	code1.scala
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\code1.scala
+[debug] 	code2.scala
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\code2.scala
+[debug] 	VCS_S$.class
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\VCS_S$.class
+[debug] 	VCS_S.class
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\VCS_S.class
+[debug] 	VCS_S.tasty
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\VCS_S.tasty
+[debug] 	VersionControlSystem
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\VersionControlSystem
+[debug] 	VersionControlSystem\Commit.class
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\VersionControlSystem\Commit.class
+[debug] 	VersionControlSystem\Commit.tasty
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\VersionControlSystem\Commit.tasty
+[debug] 	VersionControlSystem\Diff.class
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\VersionControlSystem\Diff.class
+[debug] 	VersionControlSystem\Diff.tasty
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\VersionControlSystem\Diff.tasty
+[debug] 	VersionControlSystem\Operation$$anon$1.class
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\VersionControlSystem\Operation$$anon$1.class
+[debug] 	VersionControlSystem\Operation$.class
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\VersionControlSystem\Operation$.class
+[debug] 	VersionControlSystem\Operation.class
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\VersionControlSystem\Operation.class
+[debug] 	VersionControlSystem\Operation.tasty
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\VersionControlSystem\Operation.tasty
+[debug] 	VersionControlSystem\VCS.class
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\VersionControlSystem\VCS.class
+[debug] 	VersionControlSystem\VCS.tasty
+[debug] 	  C:\Users\matti\IdeaProjects\VersionControlSystem_Scala\target\scala-3.2.2\classes\VersionControlSystem\VCS.tasty
+[debug] Done packaging.
