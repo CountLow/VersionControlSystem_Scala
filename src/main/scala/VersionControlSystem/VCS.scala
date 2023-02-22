@@ -1,25 +1,32 @@
 package VersionControlSystem
 
-import java.io.{BufferedReader, File, FileWriter}
-
-enum Operation:
-  case Insertion
-  case Deletion
+import java.io.{BufferedReader, File, FileInputStream, FileWriter}
 
 /*
   Class containing the main functionality of the Version Control System.
   The parameter 'sourcePath' specifies the root of the repository.
 */
 class VCS(val sourcePath : String):
+  private val versionHistory : List[Commit] = loadVersionHistory()
   private var latestCommit : Commit = loadLatestCommit()
-  private var stagingArea : List[FileDiff] = List()
+  private var stagingArea : List[String] = List()
+
+  /*
+
+  */
+  private def loadVersionHistory() =
+  {
+    val path : String = sourcePath + "/.vcss/versionHistory"
+//    val fIS : FileInputStream = FileInputStream(file.)
+null
+  }
 
   /*
 
   */
   private def loadLatestCommit() : Commit =
   {
-    null
+null
   }
 
   /*
@@ -29,7 +36,7 @@ class VCS(val sourcePath : String):
     INFO:
     A practical search length before aborting has to be determined.
   */
-  def generateDiffForFile(pathA : String, pathB : String) : FileDiff = {
+  /*def generateDiffForFile(pathA : String, pathB : String) : FileDiff = {
     val diff : FileDiff = FileDiff()
     val bufferedReaderA : BufferedReader =  io.Source.fromFile(pathA).bufferedReader()
     val bufferedReaderB : BufferedReader =  io.Source.fromFile(pathB).bufferedReader()
@@ -66,16 +73,16 @@ class VCS(val sourcePath : String):
     }
 
     diff
-  }
+  }*/
 
   /*
     Applies all changes of a diff to a base file.
   */
-  def applyDiffOnFile(path : String, diff : FileDiff) : Unit =
+/*  def applyDiffOnFile(path : String, diff : FileDiff) : Unit =
   {
     val bufferedReader : BufferedReader = io.Source.fromFile(path).bufferedReader()
     val stringBuffer : StringBuffer = new StringBuffer()
-    
+
     var changes : List[(Int, Operation, String)] = diff.getChanges()
     var (index, operation, content) : (Int, Operation, String) = changes.head
     changes = changes.tail
@@ -115,7 +122,7 @@ class VCS(val sourcePath : String):
     val fileWriter : FileWriter = new FileWriter(path)
     fileWriter.write(stringBuffer.toString)
     fileWriter.close()
-  }
+  }*/
 
   /*
     Creates the folder structure
@@ -196,10 +203,16 @@ class VCS(val sourcePath : String):
   */
   def commitChanges() =
   {
+    val commitDirectory : String = sourcePath + "/.vcss/commits/"
     val commit : Commit = Commit(latestCommit)
-//    commit.
 
+    for(path <- stagingArea)
+    {
+      val fileDiff : FileDiff = FileDiff(path, null)
+      commit.addFileDiff(fileDiff)
+    }
 
+    commit.saveToFile(commitDirectory, "FirstCommit")
   }
 
   /*
@@ -207,5 +220,13 @@ class VCS(val sourcePath : String):
   */
   def testFeature(args : Array[String]) =
   {
-    
+    val commit1 : Commit = Commit()
+
+    val commit2 : Commit = Commit(commit1)
+    commit2.fileDiffs = List(FileDiff(sourcePath))
+
+    commit2.saveToFile(sourcePath + "/.vcss/commits/", "comm1")
+    val commit3 = Commit()
+    commit3.loadFromFile(sourcePath + "/.vcss/commits/", "comm1")
+    println(commit3)
   }

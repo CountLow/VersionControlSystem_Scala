@@ -7,7 +7,7 @@ import collection.mutable.Set
 /*
   Represents changes in folder structure.
 */
-class StructureDiff(val sourcePath : String, val previousDiff : StructureDiff = null) {
+class StructureDiff(val sourcePath : String, val previousDiff : StructureDiff = null) extends Serializable {
   private var addedFiles : List[String] = List()
   private var deletedFiles : List[String] = List()
 

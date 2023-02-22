@@ -7,8 +7,7 @@ import java.io.{FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutp
   Each files change is saved as a corresponding instance of 'Diff'.
 */
 class Commit(val parent : Commit = null) extends Serializable:
-  private val directoryPath : String = ""
-  val fileDiffs : List[FileDiff] = List()
+  var fileDiffs: List[FileDiff] = List()
   val structureDiff : StructureDiff = null
 
   def applyCommit() : Unit =
@@ -16,14 +15,9 @@ class Commit(val parent : Commit = null) extends Serializable:
 
   }
 
-  def applyDiff() : Unit =
-  {
-
-  }
-
   def saveToFile(sourcePath : String, name : String) : Unit =
   {
-        val path = sourcePath + "/" + name + ".commit"
+        val path = sourcePath + name + ".commit"
         val fOS : FileOutputStream = new FileOutputStream(path)
         val oOS : ObjectOutputStream = new ObjectOutputStream(fOS)
         oOS.writeObject(this)
@@ -39,6 +33,11 @@ class Commit(val parent : Commit = null) extends Serializable:
         oIS.close()
 
         data
+  }
+
+  def addFileDiff(fileDiff : FileDiff) : Unit =
+  {
+    fileDiffs = fileDiffs :+ fileDiff
   }
 
 
