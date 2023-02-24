@@ -8,27 +8,9 @@ import scala.collection.mutable.Stack
   The parameter 'sourcePath' specifies the root of the repository.
 */
 class VCS(val sourcePath : String):
-  private val versionHistory : List[Commit] = loadVersionHistory()
-  private var latestCommit : Commit = loadLatestCommit()
+  private val versionHistory : VersionHistory = VersionHistory.loadVersionHistory(sourcePath + "/.vcss")
+  private var currentCommit : Commit = if (versionHistory != null) versionHistory.currentCommit else null
   private val stagingArea : collection.mutable.Set[String] = collection.mutable.Set()
-
-  /*
-
-  */
-  private def loadVersionHistory() =
-  {
-    val path : String = sourcePath + "/.vcss/versionHistory"
-//    val fIS : FileInputStream = FileInputStream(file.)
-    null
-  }
-
-  /*
-
-  */
-  private def loadLatestCommit() : Commit =
-  {
-null
-  }
 
   /*
     Creates the folder structure
@@ -43,11 +25,11 @@ null
       return
     }
 
-    new File(sourcePath + "/.vcss").mkdir()
-    versionHistoryFile.createNewFile()
-    val fileWriter : FileWriter = new FileWriter(sourcePath + "/.vcss/versionHistory")
-    fileWriter.write("Base commit #000000")
-    fileWriter.close()
+//    new File(sourcePath + "/.vcss").mkdir()
+//    versionHistoryFile.createNewFile()
+//    val fileWriter : FileWriter = new FileWriter(sourcePath + "/.vcss/versionHistory")
+//    fileWriter.write("Base commit #000000")
+//    fileWriter.close()
 
     // Create commit directory
     new File(sourcePath + "/.vcss/commits").mkdirs()
@@ -60,18 +42,18 @@ null
   */
   def status() : Unit =
   {
-    if(latestCommit == null)
+    if(currentCommit == null)
     {
-//      val fileDiffs: List[FileDiff] = latestCommit.fileDiffs
-      val structureDiff: StructureDiff = StructureDiff(sourcePath, null)
-      structureDiff.generateDiff()
+//      val fileDiffs: List[FileDiff] = currentCommit.fileDiffs
+      val dummyStructureDiff : StructureDiff = StructureDiff(sourcePath, null)
+      val structureDiff: StructureDiff = StructureDiff.generateDiff(dummyStructureDiff)
 
       print(structureDiff.getString())
     }
     else {
-      val fileDiffs: Array[FileDiff] = latestCommit.fileDiffs
-      val structureDiff: StructureDiff = StructureDiff(sourcePath, latestCommit.structureDiff)
-      structureDiff.generateDiff()
+      val fileDiffs: Array[FileDiff] = currentCommit.fileDiffs
+      val structureDiff: StructureDiff = StructureDiff.generateDiff(currentCommit.structureDiff)
+      StructureDiff.generateDiff(currentCommit.structureDiff)
 
       print(structureDiff.getString())
     }
@@ -122,18 +104,26 @@ null
     var fileDiffs : Array[FileDiff] = Array()
 
     for(path <- stagingArea) {
-      val fileDiff : FileDiff = FileDiff(path, if(latestCommit != null )latestCommit.getDiffForFile(path) else null)
+      val fileDiff : FileDiff = FileDiff(path, if(currentCommit != null )currentCommit.getDiffForFile(path) else null)
       fileDiff.generateDiff()
       fileDiffs = fileDiffs :+ fileDiff
 
       println(fileDiff.getString())
     }
 
-    val structureDiff : StructureDiff = StructureDiff(sourcePath, if(latestCommit != null )latestCommit.structureDiff else null)
-    structureDiff.generateDiff()
+    val structureDiff : StructureDiff = StructureDiff.generateDiff(if(currentCommit != null)
+                                                                   currentCommit.structureDiff else null)
 
-    val commit : Commit = Commit(fileDiffs, structureDiff, latestCommit)
-    CommitHandler.saveToFile(commit, commitDirectory, "FirstCommit")
+    val commit : Commit = Commit(fileDiffs, structureDiff, currentCommit)
+    Commit.saveToFile(commit, commitDirectory, "FirstCommit")
+  }
+
+  /*
+
+  */
+  def checkoutVersion(commitName : String) =
+  {
+    
   }
 
   /*
@@ -141,6 +131,7 @@ null
   */
   def testFeature(args : Array[String]) =
   {
-    val commit : Commit = CommitHandler.loadFromFile(sourcePath + "/.vcss/commits/", "FirstCommit")
+    val commit : Commit = Commit.loadFromFile(sourcePath + "/.vcss/commits/", "FirstCommit")
     println(commit)
+
   }

@@ -15,85 +15,6 @@ class StructureDiff(val sourcePath : String, val previousDiff : StructureDiff = 
   private var deletedDirectories : List[String] = List()
 
   /*
-    Generates the version of StructureDiff 'previousDiff'.
-    Then the difference to the current state is generated and saved.
-  */
-  def generateDiff() : Unit =
-  {
-    val directory : File = new File(sourcePath)
-    val childrenFilePaths : Set[String] = Set()
-    val childrenDirectoryPaths : Set[String] = Set()
-    val (currentFiles, currentDirectories) : (Set[String], Set[String]) = generateVersion(previousDiff)
-
-    // Find all subdirectories and their files and add them with DFS
-    val unsearched : Stack[File] = Stack(directory)
-    while(unsearched.nonEmpty)
-    {
-      if(unsearched.top.isFile)
-        childrenFilePaths.add(unsearched.pop.getPath)
-      else if(unsearched.top.isDirectory)
-      {
-        childrenDirectoryPaths.add(unsearched.top.getPath)
-        unsearched.pushAll(unsearched.pop.listFiles())
-      }
-      else
-        unsearched.pop()
-    }
-
-    // Save changes in this diff for all directories
-    addedFiles = childrenFilePaths.toList.diff(currentFiles.toList)
-    addedDirectories = childrenDirectoryPaths.toList.diff(currentDirectories.toList)
-
-    deletedFiles = currentFiles.toList.diff(childrenFilePaths.toList)
-    deletedDirectories = currentDirectories.toList.diff(childrenDirectoryPaths.toList)
-  }
-
-  /*
-    Generates version x by applying all previous structureDiff on base version (empty).
-    Version is:
-      currentFiles
-      currentDirectories
-  */
-  def generateVersion(latestDiff : StructureDiff) : (Set[String], Set[String]) =
-  {
-    val currentFiles : Set[String] = Set()
-    val currentDictionaries : Set[String] = Set()
-    val stack : Stack[StructureDiff] = Stack()
-    var currentDiff : StructureDiff = latestDiff
-
-    if(currentDiff == null) // Early termination
-      return (currentFiles, currentDictionaries)
-
-    while(currentDiff != null)
-    {
-      stack.push(currentDiff)
-      currentDiff = currentDiff.previousDiff
-    }
-
-    currentDiff = stack.pop
-    while(currentDiff != null)
-    {
-      for(aD <- currentDiff.addedDirectories)
-        currentDictionaries.add(aD)
-
-      for (dD <- currentDiff.deletedDirectories)
-        currentDictionaries.remove(dD)
-
-      for(aF <- currentDiff.addedFiles)
-        currentFiles.add(aF)
-
-      for(dF <- currentDiff.deletedFiles)
-        currentFiles.remove(dF)
-
-      // Replace by diff
-
-      currentDiff = if (stack.nonEmpty) stack.pop else null
-    }
-
-    (currentFiles, currentDictionaries)
-  }
-
-  /*
 
   */
   def getString() : String =
@@ -107,3 +28,79 @@ class StructureDiff(val sourcePath : String, val previousDiff : StructureDiff = 
   }
 
 }
+
+object StructureDiff:
+  /*
+    Generates the version of a StructureDiff.
+    Then the difference to the current state is generated and saved.
+  */
+  def generateDiff(baseDiff: StructureDiff): StructureDiff = {
+    val directory: File = new File(baseDiff.sourcePath)
+    val childrenFilePaths: Set[String] = Set()
+    val childrenDirectoryPaths: Set[String] = Set()
+    val (currentFiles, currentDirectories): (Set[String], Set[String]) = generateVersion(baseDiff)
+
+    // Find all subdirectories and their files and add them with DFS
+    val unsearched: Stack[File] = Stack(directory)
+    while (unsearched.nonEmpty) {
+      if (unsearched.top.isFile)
+        childrenFilePaths.add(unsearched.pop.getPath)
+      else if (unsearched.top.isDirectory && unsearched.top.getPath != baseDiff.sourcePath + "\\.vcss")  // Use IgnoreFilter
+      {
+        childrenDirectoryPaths.add(unsearched.top.getPath)
+        unsearched.pushAll(unsearched.pop.listFiles())
+      }
+      else
+        unsearched.pop()
+    }
+
+    val structureDiff : StructureDiff = StructureDiff(baseDiff.sourcePath, baseDiff)
+
+    // Save changes in this diff for all directories
+    structureDiff.addedFiles = childrenFilePaths.toList.diff(currentFiles.toList)
+    structureDiff.addedDirectories = childrenDirectoryPaths.toList.diff(currentDirectories.toList)
+    structureDiff.deletedFiles = currentFiles.toList.diff(childrenFilePaths.toList)
+    structureDiff.deletedDirectories = currentDirectories.toList.diff(childrenDirectoryPaths.toList)
+
+    return structureDiff
+  }
+
+  /*
+    Generates version x by applying all previous structureDiff on base version (empty).
+    Version is:
+      currentFiles
+      currentDirectories
+  */
+  def generateVersion(baseDiff: StructureDiff): (Set[String], Set[String]) = {
+    val currentFiles: Set[String] = Set()
+    val currentDictionaries: Set[String] = Set()
+    val stack: Stack[StructureDiff] = Stack()
+    var currentDiff: StructureDiff = baseDiff
+
+    if (currentDiff == null) // Early termination
+      return (currentFiles, currentDictionaries)
+
+    while (currentDiff != null) {
+      stack.push(currentDiff)
+      currentDiff = currentDiff.previousDiff
+    }
+
+    currentDiff = stack.pop
+    while (currentDiff != null) {
+      for (aD <- currentDiff.addedDirectories)
+        currentDictionaries.add(aD)
+
+      for (dD <- currentDiff.deletedDirectories)
+        currentDictionaries.remove(dD)
+
+      for (aF <- currentDiff.addedFiles)
+        currentFiles.add(aF)
+
+      for (dF <- currentDiff.deletedFiles)
+        currentFiles.remove(dF)
+
+      currentDiff = if (stack.nonEmpty) stack.pop else null
+    }
+
+    return (currentFiles, currentDictionaries)
+  }

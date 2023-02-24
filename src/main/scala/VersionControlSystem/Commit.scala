@@ -1,11 +1,15 @@
 package VersionControlSystem
 
+import java.io.{FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutputStream}
+
 /*
   Class that represents the changes between two versions.
   Each files change is stored as a corresponding instance of 'Diff'.
 */
 class Commit(val fileDiffs : Array[FileDiff], val structureDiff : StructureDiff,
              val previousCommit : Commit = null) extends Serializable:
+
+
 
   def applyCommit() : Unit =
   {
@@ -22,3 +26,22 @@ class Commit(val fileDiffs : Array[FileDiff], val structureDiff : StructureDiff,
   }
 
 
+object Commit {
+  def saveToFile(commit : Commit, sourcePath: String, name: String): Unit = {
+    val path = sourcePath + name + ".commit"
+    val fOS: FileOutputStream = new FileOutputStream(path)
+    val oOS: ObjectOutputStream = new ObjectOutputStream(fOS)
+    oOS.writeObject(commit)
+    oOS.close()
+  }
+
+  def loadFromFile(sourcePath: String, name: String): Commit = {
+    val path = sourcePath + "/" + name + ".commit"
+    val fIS: FileInputStream = new FileInputStream(path)
+    val oIS: ObjectInputStream = new ObjectInputStream(fIS)
+    val data: Commit = oIS.readObject().asInstanceOf[Commit]
+    oIS.close()
+
+    data
+  }
+}
