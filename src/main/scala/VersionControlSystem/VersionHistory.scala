@@ -1,23 +1,35 @@
 package VersionControlSystem
 
-import java.io.{FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutputStream, File}
+import VersionControlSystem.VersionHistory.saveVersionHistory
+
+import java.io.{File, FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutputStream}
 
 /*
   Contains information about branches
 */
-class VersionHistory extends Serializable:
+class VersionHistory(filePath : String) extends Serializable:
   var currentCommit : Commit = null
   private var commits : Array[Commit] = Array()
 
   def commitChanges(commit : Commit) = {
     currentCommit = commit
+    commits = commits :+ commit
+    saveVersionHistory(this, filePath)
+  }
+
+  def getCommitById(identifier : String) : Commit =
+  {
+    val matches : Array[Commit] = commits.filter(c => c.identifier == identifier)
+    if(matches.nonEmpty) matches(0) else null
   }
 
 
 object VersionHistory:
   def loadVersionHistory(vcssPath : String) : VersionHistory = {
-    if(!new File(vcssPath + "/versionHistory").exists())
+    if(!new File(vcssPath + "/versionHistory").exists()) {
+      println("Version History not found")
       return null
+    }
 
     val fIS : FileInputStream = FileInputStream(vcssPath + "/versionHistory")
     val oIS : ObjectInputStream = ObjectInputStream(fIS)

@@ -8,11 +8,11 @@ import collection.mutable.Set
   Represents changes in folder structure.
 */
 class StructureDiff(val sourcePath : String, val previousDiff : StructureDiff = null) extends Serializable {
-  private var addedFiles : List[String] = List()
-  private var deletedFiles : List[String] = List()
+  var addedFiles : List[String] = List()
+  var deletedFiles : List[String] = List()
 
-  private var addedDirectories : List[String] = List()
-  private var deletedDirectories : List[String] = List()
+  var addedDirectories : List[String] = List()
+  var deletedDirectories : List[String] = List()
 
   /*
     returns added and deleted files and directories as a string
@@ -36,19 +36,22 @@ object StructureDiff:
   */
   def generateDiff(baseDiff: StructureDiff): StructureDiff = {
 
+    val ignoreFilter : IgnoreFilter = VCS.vcs.ignoreFilter
+
+
     val directory: File = new File(baseDiff.sourcePath)
     val childrenFilePaths: Set[String] = Set()
     val childrenDirectoryPaths: Set[String] = Set()
     val (currentFiles, currentDirectories): (Set[String], Set[String]) = StructureDiff.generateVersion(baseDiff)
 
     // Find all subdirectories and their files and add them with DFS
-    val unsearched: Stack[File] = Stack(directory)
+    val unsearched: Stack[File] = Stack()
+    unsearched.pushAll(directory.listFiles())
+
     while (unsearched.nonEmpty) {
-      if (unsearched.top.isFile)
+      if (unsearched.top.isFile && !ignoreFilter.shouldIgnore(unsearched.top.getPath))
         childrenFilePaths.add(unsearched.pop.getPath)
-      else if(unsearched.top.getPath == baseDiff.sourcePath)
-        unsearched.pop()
-      else if (unsearched.top.isDirectory && unsearched.top.getPath != baseDiff.sourcePath + "\\.vcss")  // Use IgnoreFilter
+      else if (unsearched.top.isDirectory && !ignoreFilter.shouldIgnore(unsearched.top.getPath))  // Use IgnoreFilter
       {
         childrenDirectoryPaths.add(unsearched.top.getPath)
         unsearched.pushAll(unsearched.pop.listFiles())

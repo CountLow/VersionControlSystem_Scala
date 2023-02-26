@@ -10,7 +10,7 @@ class Commit(val fileDiffs : Array[FileDiff], val structureDiff : StructureDiff,
              val previousCommit : Commit = null) extends Serializable:
 
   val identifier : String = Commit.generateIdentifier(this)
-  val commitNumberOnBranch : Int = if(previousCommit == null) 0 else previousCommit.commitNumberOnBranch
+  val commitNumberOnBranch : Int = if(previousCommit == null) 0 else previousCommit.commitNumberOnBranch + 1
   var isHead : Boolean = false
 
   def applyCommit() : Unit =

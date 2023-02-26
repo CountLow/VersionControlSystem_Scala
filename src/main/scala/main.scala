@@ -7,7 +7,7 @@ import VersionControlSystem.VCS
 object VCS_S {
   def main(args: Array[String]) : Unit = {
     val path : String = System.getProperty("user.dir")
-    val vcs : VCS = VCS(path)
+    val vcs : VCS = VCS.createVCS(path)
 
     if (args.length == 0)
       printHelp()
@@ -19,6 +19,7 @@ object VCS_S {
       case "stage" => vcs.stage(args.drop(1))
       case "commit" => vcs.commitChanges()
       case "status" => vcs.status()
+      case "checkout" => vcs.checkoutVersion(args(1))
       case _ => printHelp()
   }
 
