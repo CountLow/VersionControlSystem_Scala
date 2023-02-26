@@ -25,12 +25,6 @@ class VCS(val sourcePath : String):
       return
     }
 
-//    new File(sourcePath + "/.vcss").mkdir()
-//    versionHistoryFile.createNewFile()
-//    val fileWriter : FileWriter = new FileWriter(sourcePath + "/.vcss/versionHistory")
-//    fileWriter.write("Base commit #000000")
-//    fileWriter.close()
-
     // Create commit directory
     new File(sourcePath + "/.vcss/commits").mkdirs()
 
@@ -64,8 +58,13 @@ class VCS(val sourcePath : String):
     Adds all changed files which are either directly specified or within a specified directory to the
     staging area.
   */
-  def stage(paths : Array[String]) : Unit =
+  def stage(ps : Array[String]) : Unit =
   {
+    var paths : Array[String] = ps
+
+    if(paths(0) == "*") // Add all
+      paths = new File(sourcePath).listFiles().map(f => f.getAbsolutePath)
+
     for
       path <- paths
     do
@@ -108,15 +107,14 @@ class VCS(val sourcePath : String):
       val fileDiff : FileDiff = FileDiff(path, if(currentCommit != null )currentCommit.getDiffForFile(path) else null)
       fileDiff.generateDiff()
       fileDiffs = fileDiffs :+ fileDiff
-
-      println(fileDiff.getString())
     }
 
+    val dummyStructureDiff : StructureDiff = StructureDiff(sourcePath, null)
     val structureDiff : StructureDiff = StructureDiff.generateDiff(if(currentCommit != null)
-                                                                   currentCommit.structureDiff else null)
+                                                                   currentCommit.structureDiff else dummyStructureDiff)
 
     val commit : Commit = Commit(fileDiffs, structureDiff, currentCommit)
-    Commit.saveToFile(commit, commitDirectory, "FirstCommit")
+    Commit.saveToFile(commit, commitDirectory, commit.identifier)
   }
 
   /*
@@ -132,7 +130,6 @@ class VCS(val sourcePath : String):
   */
   def testFeature(args : Array[String]) =
   {
-    val commit : Commit = Commit.loadFromFile(sourcePath + "/.vcss/commits/", "FirstCommit")
+    val commit : Commit = Commit.loadFromFile(sourcePath + "/.vcss/commits/", currentCommit.identifier)
     println(commit)
-
   }

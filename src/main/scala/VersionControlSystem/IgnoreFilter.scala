@@ -17,7 +17,7 @@ object IgnoreFilter:
     var line : String = bufferedReader.readLine()
 
     val fileTypes : mutable.Set[String] = mutable.Set("")
-    val paths : mutable.Set[String] = mutable.Set(".vcss")
+    val paths : mutable.Set[String] = mutable.Set(".vcss", "VersionControlSystem", "VCS_S$.class", "VCS_S.class", "VCS_S.tasty")
 
     while(line != null)
     {
