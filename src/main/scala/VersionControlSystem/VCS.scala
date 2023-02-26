@@ -1,5 +1,7 @@
 package VersionControlSystem
 
+import VersionControlSystem.VCS.vcs
+
 import java.io.{BufferedReader, File, FileInputStream, FileWriter}
 import scala.collection.mutable.Stack
 
@@ -11,6 +13,8 @@ class VCS(val sourcePath : String):
   private val versionHistory : VersionHistory = VersionHistory.loadVersionHistory(sourcePath + "/.vcss")
   private var currentCommit : Commit = if (versionHistory != null) versionHistory.currentCommit else null
   private val stagingArea : collection.mutable.Set[String] = collection.mutable.Set()
+
+  val ignoreFilter : IgnoreFilter = IgnoreFilter.generateFromFile(sourcePath)
 
   /*
     Creates the folder structure
@@ -29,6 +33,12 @@ class VCS(val sourcePath : String):
     new File(sourcePath + "/.vcss/commits").mkdirs()
 
     println("Initialized vcss repository.")
+
+    // Create .vcssIgnore
+    val vcssIgnore : File = new File(sourcePath + "/.vcss/.vcssIgnore")
+    val fileWriter : FileWriter = FileWriter(vcssIgnore)
+    fileWriter.write("path : .vcss\npath : VersionControlSystem\npath : VCS_S$.class\npath : VCS_S.class\npath : VCS_S.tasty")
+    fileWriter.close()
   }
 
   /*
@@ -38,13 +48,16 @@ class VCS(val sourcePath : String):
   {
     if(currentCommit == null)
     {
-//      val fileDiffs: List[FileDiff] = currentCommit.fileDiffs
+      println("Not commited anything yet")
+
+//      val fileDiffs: List[FileDiff] =
       val dummyStructureDiff : StructureDiff = StructureDiff(sourcePath, null)
       val structureDiff: StructureDiff = StructureDiff.generateDiff(dummyStructureDiff)
 
       print(structureDiff.getString())
     }
     else {
+      println("Current commit: " + currentCommit.identifier)
       val fileDiffs: Array[FileDiff] = currentCommit.fileDiffs
       val structureDiff: StructureDiff = StructureDiff.generateDiff(currentCommit.structureDiff)
       StructureDiff.generateDiff(currentCommit.structureDiff)
@@ -117,11 +130,13 @@ class VCS(val sourcePath : String):
   }
 
   /*
-
+    Loads the data of a previous commit
   */
   def checkoutVersion(commitName : String) =
   {
-    
+    // Maybe implement warning
+
+
   }
 
   /*
@@ -131,4 +146,13 @@ class VCS(val sourcePath : String):
   {
     val commit : Commit = Commit.loadFromFile(sourcePath + "/.vcss/commits/", currentCommit.identifier)
     println(commit)
+  }
+
+
+object VCS:
+  var vcs : VCS = null
+  def createVCS(sourcePath : String) : VCS =
+  {
+    vcs = VCS(sourcePath)
+    return vcs
   }

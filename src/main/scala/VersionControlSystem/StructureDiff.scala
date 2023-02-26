@@ -35,6 +35,8 @@ object StructureDiff:
     Then the difference to the current state is generated and saved.
   */
   def generateDiff(baseDiff: StructureDiff): StructureDiff = {
+    val ignoreFilter : IgnoreFilter = VCS.vcs.ignoreFilter
+
     val directory: File = new File(baseDiff.sourcePath)
     val childrenFilePaths: Set[String] = Set()
     val childrenDirectoryPaths: Set[String] = Set()
@@ -43,11 +45,9 @@ object StructureDiff:
     // Find all subdirectories and their files and add them with DFS
     val unsearched: Stack[File] = Stack(directory)
     while (unsearched.nonEmpty) {
-      if (unsearched.top.isFile)
+      if (unsearched.top.isFile && !ignoreFilter.shouldIgnore(unsearched.top.getPath))
         childrenFilePaths.add(unsearched.pop.getPath)
-      else if(unsearched.top.getPath == baseDiff.sourcePath)
-        unsearched.pop()
-      else if (unsearched.top.isDirectory && unsearched.top.getPath != baseDiff.sourcePath + "\\.vcss")  // Use IgnoreFilter
+      else if (unsearched.top.isDirectory && !ignoreFilter.shouldIgnore(unsearched.top.getPath))  // Use IgnoreFilter
       {
         childrenDirectoryPaths.add(unsearched.top.getPath)
         unsearched.pushAll(unsearched.pop.listFiles())

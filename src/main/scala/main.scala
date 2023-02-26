@@ -3,7 +3,7 @@ import VersionControlSystem.VCS
 object VCS_S {
   def main(args: Array[String]) : Unit = {
     val path : String = System.getProperty("user.dir")
-    val vcs : VCS = VCS(path)
+    val vcs : VCS = VCS.createVCS(path)
 
     if (args.length == 0)
       printHelp()
