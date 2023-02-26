@@ -15,7 +15,7 @@ class StructureDiff(val sourcePath : String, val previousDiff : StructureDiff = 
   private var deletedDirectories : List[String] = List()
 
   /*
-
+    returns added and deleted files and directories as a string
   */
   def getString() : String =
   {
@@ -35,6 +35,7 @@ object StructureDiff:
     Then the difference to the current state is generated and saved.
   */
   def generateDiff(baseDiff: StructureDiff): StructureDiff = {
+
     val directory: File = new File(baseDiff.sourcePath)
     val childrenFilePaths: Set[String] = Set()
     val childrenDirectoryPaths: Set[String] = Set()

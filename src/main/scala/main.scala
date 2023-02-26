@@ -1,5 +1,9 @@
 import VersionControlSystem.VCS
 
+/*
+  combines the different features of the Version Control System
+  can be called with the cmd file VCS
+*/
 object VCS_S {
   def main(args: Array[String]) : Unit = {
     val path : String = System.getProperty("user.dir")
@@ -24,6 +28,7 @@ object VCS_S {
     println("   diff [PATH]                     Show the differences for a file")
     println("   stage [PATH_A] [PATH_B] [...]   Stage specified files for commit")
     println("   commit                          Commit all staged changes to create a new version")
+    println("   status                          Show the status of the folder")
     println("   ")
   }
 }

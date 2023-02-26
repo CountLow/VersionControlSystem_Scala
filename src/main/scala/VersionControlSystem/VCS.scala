@@ -38,7 +38,8 @@ class VCS(val sourcePath : String):
   }
 
   /*
-
+    prints the structural differences in the working copy
+    e.g. when a file or directory was added
   */
   def status() : Unit =
   {
@@ -96,7 +97,7 @@ class VCS(val sourcePath : String):
   }
 
   /*
-
+    save changes of current staging area as a commit
   */
   def commitChanges() =
   {

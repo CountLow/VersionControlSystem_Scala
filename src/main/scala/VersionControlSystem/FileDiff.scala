@@ -8,6 +8,10 @@ import java.io.{BufferedReader, FileInputStream, FileOutputStream, ObjectInputSt
 class FileDiff(val sourcePath : String, val previousDiff : FileDiff = null) extends Serializable:
   private var changes: List[(Int, Operation, String)] = List()
 
+  /*
+    generates a list of of differences in a File to the previous Diff based on the operation
+    this function does not change class attribute changes
+  */
   def generateDiff() : Unit =
   {
     val bRFile : BufferedReader = io.Source.fromFile(sourcePath).bufferedReader()
@@ -98,6 +102,11 @@ class FileDiff(val sourcePath : String, val previousDiff : FileDiff = null) exte
     }
   }
 
+  /*
+    adds a generated difference to the class attribute
+    depending on the parameters either for a single Change or for a List of changes
+
+  */
   def addChange(index : Int, operation: Operation, content : String) : Unit =
   {
     changes = changes :+ (index, operation, content)
@@ -108,6 +117,7 @@ class FileDiff(val sourcePath : String, val previousDiff : FileDiff = null) exte
       changes = changes :+ (index, operation, c)
   }
 
+  // returns changes as a string
   def getString() : String =
   {
     return changes.mkString("\n")
