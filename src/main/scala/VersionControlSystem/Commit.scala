@@ -29,6 +29,10 @@ class Commit(val fileDiffs : Array[FileDiff], val structureDiff : StructureDiff,
 
 
 object Commit {
+
+  /*
+    saves the commit in the specified path with its specified name (numbers)
+  */
   def saveToFile(commit : Commit, sourcePath: String, name: String): Unit = {
     val path = sourcePath + name + ".commit"
     val fOS: FileOutputStream = new FileOutputStream(path)
@@ -37,6 +41,9 @@ object Commit {
     oOS.close()
   }
 
+  /*
+    loads the commit from its path and name
+  */
   def loadFromFile(sourcePath: String, name: String): Commit = {
     val path = sourcePath + "/" + name + ".commit"
     val fIS: FileInputStream = new FileInputStream(path)
@@ -47,9 +54,11 @@ object Commit {
     data
   }
 
+  /*
+    Generates from the number of the commit a string
+  */
   def generateIdentifier(commit : Commit) : String =
   {
-//    val branch : String = VersionHistory.getBranch(commit)
-    return commit.commitNumberOnBranch.toHexString
+    commit.commitNumberOnBranch.toHexString
   }
 }

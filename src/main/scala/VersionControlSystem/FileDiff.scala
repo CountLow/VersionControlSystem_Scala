@@ -120,10 +120,10 @@ class FileDiff(val sourcePath : String, val previousDiff : FileDiff = null) exte
   // returns changes as a string
   def getString() : String =
   {
-    return changes.mkString("\n")
+    changes.mkString("\n")
   }
 
   def getChanges() : List[(Int, Operation, String)] =
   {
-    return changes
+    changes
   }

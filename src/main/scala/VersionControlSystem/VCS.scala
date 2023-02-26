@@ -8,9 +8,13 @@ import scala.collection.mutable.Stack
 /*
   Class containing the main functionality of the Version Control System.
   The parameter 'sourcePath' specifies the root of the repository.
+  There are three attributes
+      versionHistory is storing the last version
+      currentCommit is the latest commit from the versionHistory
+      stagingArea is a Set representing the stagingArea
 */
 class VCS(val sourcePath : String):
-  private val versionHistory : VersionHistory = VersionHistory.loadVersionHistory(sourcePath + "/.vcss")
+  private var versionHistory : VersionHistory = VersionHistory.loadVersionHistory(sourcePath + "/.vcss")
   private var currentCommit : Commit = if (versionHistory != null) versionHistory.currentCommit else null
   private val stagingArea : collection.mutable.Set[String] = collection.mutable.Set()
 
@@ -34,12 +38,19 @@ class VCS(val sourcePath : String):
     {
       new File(sourcePath + "/.vcss/versionHistory").createNewFile()
       val path : String = sourcePath + "/.vcss"
-      val versionHistory : VersionHistory = VersionHistory(path)
-      VersionHistory.saveVersionHistory(versionHistory, path)
+      versionHistory = VersionHistory(path)
+
     }
 
     // Create commit directory
     new File(sourcePath + "/.vcss/commits").mkdir()
+    // Create first base commit so commit != null
+    val commit: Commit = Commit(Array(), StructureDiff(sourcePath, null), null)
+    commit.isHead = true
+    Commit.saveToFile(commit, sourcePath + "/.vcss/commits/", commit.identifier)
+    // save first commit in version History
+    versionHistory.commitChanges(commit)
+    VersionHistory.saveVersionHistory(versionHistory, sourcePath + "/.vcss")
 
     println("Initialized vcss repository.")
 
@@ -56,7 +67,7 @@ class VCS(val sourcePath : String):
   */
   def status() : Unit =
   {
-    if(currentCommit == null)
+    if(currentCommit.isHead)
     {
       println("Not commited anything yet")
 
@@ -130,12 +141,6 @@ class VCS(val sourcePath : String):
     val commitDirectory : String = sourcePath + "/.vcss/commits/"
     var fileDiffs : Array[FileDiff] = Array()
 
-//    for(path <- stagingArea) {
-//      val fileDiff : FileDiff = FileDiff(path, if(currentCommit != null )currentCommit.getDiffForFile(path) else null)
-//      fileDiff.generateDiff()
-//      fileDiffs = fileDiffs :+ fileDiff
-//    }
-
     val dummyStructureDiff : StructureDiff = StructureDiff(sourcePath, null)
     val structureDiff : StructureDiff = StructureDiff.generateDiff(if(currentCommit != null)
                                                                    currentCommit.structureDiff else dummyStructureDiff)
@@ -146,7 +151,7 @@ class VCS(val sourcePath : String):
     currentCommit = commit
     println(commit.identifier)
     versionHistory.commitChanges(commit)
-    
+    VersionHistory.saveVersionHistory(versionHistory, sourcePath + "/.vcss")
 
     clearStagingArea()
   }
@@ -179,14 +184,14 @@ class VCS(val sourcePath : String):
       new File(sourcePath + aD).delete()
 
 
-    val fileVersions : Array[List[(Int,Operation,String)]] = commit.fileDiffs.map(generateDiff)
-
+    var fileVersions : Array[List[(Int,Operation,String)]] = commit.fileDiffs.map((x) => x.getChanges())
+    //flip Operation
+    fileVersions = fileVersions.map((x) => x.map((y) => if (y._2 == Operation.Insertion) (y._1, Operation.Deletion, y._3) else (y._1, Operation.Insertion, y._3)))
 
 
   }
-
   /*
-
+    Saves the staging area as a text document in the vcss directory
   */
   def saveStagingArea() : Unit =
   {
@@ -197,7 +202,7 @@ class VCS(val sourcePath : String):
   }
 
   /*
-
+    generate the staging area from the text file
   */
   def loadStagingArea() : Unit =
   {
@@ -212,6 +217,9 @@ class VCS(val sourcePath : String):
     }
   }
 
+  /*
+    clears the staging area by creating a new empty text file
+  */
   def clearStagingArea() : Unit =
   {
     val file: File = new File(sourcePath + "/.vcss/stagingArea.txt")
@@ -229,7 +237,9 @@ class VCS(val sourcePath : String):
     println(commit)
   }
 
-
+/*
+  called by the main function
+*/
 object VCS:
   var vcs : VCS = null
   def createVCS(sourcePath : String) : VCS =
