@@ -9,7 +9,9 @@ import java.io.{FileInputStream, FileOutputStream, ObjectInputStream, ObjectOutp
 class Commit(val fileDiffs : Array[FileDiff], val structureDiff : StructureDiff,
              val previousCommit : Commit = null) extends Serializable:
 
-
+  val identifier : String = Commit.generateIdentifier(this)
+  val commitNumberOnBranch : Int = if(previousCommit == null) 0 else previousCommit.commitNumberOnBranch
+  var isHead : Boolean = false
 
   def applyCommit() : Unit =
   {
@@ -43,5 +45,11 @@ object Commit {
     oIS.close()
 
     data
+  }
+
+  def generateIdentifier(commit : Commit) : String =
+  {
+//    val branch : String = VersionHistory.getBranch(commit)
+    return commit.commitNumberOnBranch.toHexString
   }
 }

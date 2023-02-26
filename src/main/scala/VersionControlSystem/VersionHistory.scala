@@ -24,9 +24,12 @@ object VersionHistory:
     oIS.readObject.asInstanceOf[VersionHistory]
   }
 
-  private def saveVersionHistory(versionHistory : VersionHistory, vcssPath : String) : Unit =
+  def saveVersionHistory(versionHistory : VersionHistory, vcssPath : String) : Unit =
   {
     val fOS : FileOutputStream = FileOutputStream(vcssPath + "/versionHistory")
     val oOS : ObjectOutputStream = ObjectOutputStream(fOS)
     oOS.writeObject(versionHistory)
   }
+
+
+

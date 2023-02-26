@@ -38,13 +38,15 @@ object StructureDiff:
     val directory: File = new File(baseDiff.sourcePath)
     val childrenFilePaths: Set[String] = Set()
     val childrenDirectoryPaths: Set[String] = Set()
-    val (currentFiles, currentDirectories): (Set[String], Set[String]) = generateVersion(baseDiff)
+    val (currentFiles, currentDirectories): (Set[String], Set[String]) = StructureDiff.generateVersion(baseDiff)
 
     // Find all subdirectories and their files and add them with DFS
     val unsearched: Stack[File] = Stack(directory)
     while (unsearched.nonEmpty) {
       if (unsearched.top.isFile)
         childrenFilePaths.add(unsearched.pop.getPath)
+      else if(unsearched.top.getPath == baseDiff.sourcePath)
+        unsearched.pop()
       else if (unsearched.top.isDirectory && unsearched.top.getPath != baseDiff.sourcePath + "\\.vcss")  // Use IgnoreFilter
       {
         childrenDirectoryPaths.add(unsearched.top.getPath)
