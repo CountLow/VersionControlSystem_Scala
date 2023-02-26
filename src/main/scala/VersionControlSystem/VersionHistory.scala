@@ -29,7 +29,8 @@ object VersionHistory:
     val fOS : FileOutputStream = FileOutputStream(vcssPath + "vH.versionHistory")
     val oOS : ObjectOutputStream = ObjectOutputStream(fOS)
     oOS.writeObject(versionHistory)
-    println(versionHistory)
+    //for debugging
+    //println(versionHistory)
   }
 
 

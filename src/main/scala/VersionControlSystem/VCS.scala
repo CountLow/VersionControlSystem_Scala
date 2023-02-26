@@ -30,17 +30,18 @@ class VCS(val sourcePath : String):
 
     // Create commit directory
     new File(sourcePath + "/.vcss/commits").mkdirs()
-    val commit : Commit = Commit(null, null, null)
+    val commit : Commit = Commit(Array(), StructureDiff(sourcePath, null), null)
     commit.isHead = true
     Commit.saveToFile(commit, sourcePath + "/.vcss/commits/", commit.identifier)
     if (versionHistory == null) versionHistory = VersionHistory()
 
     versionHistory.commitChanges(commit)
 
+    
     println("Initialized vcss repository.")
 
-    //for debugging
-    //VersionHistory.saveVersionHistory(versionHistory, sourcePath + "/.vcss/")
+
+    VersionHistory.saveVersionHistory(versionHistory, sourcePath + "/.vcss/")
   }
 
   /*
