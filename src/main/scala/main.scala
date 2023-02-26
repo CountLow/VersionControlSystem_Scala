@@ -20,6 +20,8 @@ object VCS_S {
       case "commit" => vcs.commitChanges()
       case "status" => vcs.status()
       case _ => printHelp()
+
+      
   }
 
   private def printHelp() : Unit = {

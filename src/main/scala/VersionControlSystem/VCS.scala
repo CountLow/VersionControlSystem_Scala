@@ -1,5 +1,8 @@
 package VersionControlSystem
 
+import VersionControlSystem.Commit.generateIdentifier
+import VersionControlSystem.VersionHistory.saveVersionHistory
+
 import java.io.{BufferedReader, File, FileInputStream, FileWriter}
 import scala.collection.mutable.Stack
 
@@ -8,7 +11,7 @@ import scala.collection.mutable.Stack
   The parameter 'sourcePath' specifies the root of the repository.
 */
 class VCS(val sourcePath : String):
-  private val versionHistory : VersionHistory = VersionHistory.loadVersionHistory(sourcePath + "/.vcss")
+  var versionHistory : VersionHistory = VersionHistory.loadVersionHistory(sourcePath + "/.vcss/")
   private var currentCommit : Commit = if (versionHistory != null) versionHistory.currentCommit else null
   private val stagingArea : collection.mutable.Set[String] = collection.mutable.Set()
 
@@ -18,7 +21,7 @@ class VCS(val sourcePath : String):
   def initializeVCS() : Unit =
   {
     // Create version history if doesn't already exist
-    val versionHistoryFile : File = new File(sourcePath + "/.vcss/versionHistory")
+    val versionHistoryFile : File = new File(sourcePath + "/.vcss")
     if(versionHistoryFile.exists())
     {
       println("Repository already initialized!")
@@ -27,8 +30,17 @@ class VCS(val sourcePath : String):
 
     // Create commit directory
     new File(sourcePath + "/.vcss/commits").mkdirs()
+    val commit : Commit = Commit(null, null, null)
+    commit.isHead = true
+    Commit.saveToFile(commit, sourcePath + "/.vcss/commits/", commit.identifier)
+    if (versionHistory == null) versionHistory = VersionHistory()
+
+    versionHistory.commitChanges(commit)
 
     println("Initialized vcss repository.")
+
+    //for debugging
+    //VersionHistory.saveVersionHistory(versionHistory, sourcePath + "/.vcss/")
   }
 
   /*
@@ -52,6 +64,7 @@ class VCS(val sourcePath : String):
 
       print(structureDiff.getString())
     }
+
   }
 
   /*
@@ -93,6 +106,7 @@ class VCS(val sourcePath : String):
 
       println("Staged the following files for commit:")
       println(stagingArea)
+
   }
 
   /*
@@ -100,6 +114,7 @@ class VCS(val sourcePath : String):
   */
   def commitChanges() =
   {
+    println(currentCommit)
     val commitDirectory : String = sourcePath + "/.vcss/commits/"
     var fileDiffs : Array[FileDiff] = Array()
 
@@ -115,14 +130,35 @@ class VCS(val sourcePath : String):
 
     val commit : Commit = Commit(fileDiffs, structureDiff, currentCommit)
     Commit.saveToFile(commit, commitDirectory, commit.identifier)
+    versionHistory.commitChanges(commit)
+    println(commit.identifier)
+    VersionHistory.saveVersionHistory(versionHistory, sourcePath + "/.vcss/")
   }
 
   /*
 
   */
-  def checkoutVersion(commitName : String) =
+  def checkoutVersion(commitNumber : String) =
   {
-    
+    if (currentCommit == null) println("no commits yet")
+    else{
+      var temp : Commit = currentCommit
+      var found : Boolean = false
+      while(!found)
+
+        if (generateIdentifier(temp) == commitNumber){
+          found = true
+          currentCommit = temp
+        }
+
+        if (temp.isHead){
+          println("Commit number doesn't exist")
+          found = true
+        }
+        else{
+          temp = temp.previousCommit
+        }
+    }
   }
 
   /*

@@ -16,19 +16,20 @@ class VersionHistory extends Serializable:
 
 object VersionHistory:
   def loadVersionHistory(vcssPath : String) : VersionHistory = {
-    if(!new File(vcssPath + "/versionHistory").exists())
+    if(!new File(vcssPath + "vH.versionHistory").exists())
       return null
 
-    val fIS : FileInputStream = FileInputStream(vcssPath + "/versionHistory")
+    val fIS : FileInputStream = FileInputStream(vcssPath + "vH.versionHistory")
     val oIS : ObjectInputStream = ObjectInputStream(fIS)
     oIS.readObject.asInstanceOf[VersionHistory]
   }
 
   def saveVersionHistory(versionHistory : VersionHistory, vcssPath : String) : Unit =
   {
-    val fOS : FileOutputStream = FileOutputStream(vcssPath + "/versionHistory")
+    val fOS : FileOutputStream = FileOutputStream(vcssPath + "vH.versionHistory")
     val oOS : ObjectOutputStream = ObjectOutputStream(fOS)
     oOS.writeObject(versionHistory)
+    println(versionHistory)
   }
 
 
