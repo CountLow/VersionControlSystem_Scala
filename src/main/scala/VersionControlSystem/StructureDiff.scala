@@ -8,11 +8,11 @@ import collection.mutable.Set
   Represents changes in folder structure.
 */
 class StructureDiff(val sourcePath : String, val previousDiff : StructureDiff = null) extends Serializable {
-  private var addedFiles : List[String] = List()
-  private var deletedFiles : List[String] = List()
+  var addedFiles : List[String] = List()
+  var deletedFiles : List[String] = List()
 
-  private var addedDirectories : List[String] = List()
-  private var deletedDirectories : List[String] = List()
+  var addedDirectories : List[String] = List()
+  var deletedDirectories : List[String] = List()
 
   /*
 
@@ -43,7 +43,9 @@ object StructureDiff:
     val (currentFiles, currentDirectories): (Set[String], Set[String]) = StructureDiff.generateVersion(baseDiff)
 
     // Find all subdirectories and their files and add them with DFS
-    val unsearched: Stack[File] = Stack(directory)
+    val unsearched: Stack[File] = Stack()
+    unsearched.pushAll(directory.listFiles())
+
     while (unsearched.nonEmpty) {
       if (unsearched.top.isFile && !ignoreFilter.shouldIgnore(unsearched.top.getPath))
         childrenFilePaths.add(unsearched.pop.getPath)

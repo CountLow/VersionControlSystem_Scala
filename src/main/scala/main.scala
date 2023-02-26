@@ -15,6 +15,7 @@ object VCS_S {
       case "stage" => vcs.stage(args.drop(1))
       case "commit" => vcs.commitChanges()
       case "status" => vcs.status()
+      case "checkout" => vcs.checkoutVersion(args(1))
       case _ => printHelp()
   }
 

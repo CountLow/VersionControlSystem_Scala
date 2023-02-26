@@ -19,6 +19,8 @@ class IgnoreFilter(val paths : Array[String], val fileTypes : Array[String]):
       val possibleParentPath : Path = Paths.get(p).normalize()
       val testPath : Path = Paths.get(path).normalize()
 
+//      println("Comparing: " + possibleParentPath + " and " + testPath)
+
       if(testPath.startsWith(possibleParentPath))
         ignored = true
     }
