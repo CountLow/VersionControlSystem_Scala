@@ -90,10 +90,8 @@ class VCS(val sourcePath : String):
       val dummyStructureDiff : StructureDiff = StructureDiff(sourcePath, null)
       val structureDiff: StructureDiff = StructureDiff.generateDiff(dummyStructureDiff)
 
-      println("Added and deleted files:")
+      println("All current changes compared to last commit:")
       print(structureDiff.getString())
-      println("")
-      println("Changes in files:")
 
       for(path <- files)
       {
@@ -101,8 +99,9 @@ class VCS(val sourcePath : String):
         val newDiff : FileDiff = FileDiff(path, dummyDiff)
         newDiff.generateDiff()
         if(!newDiff.getChanges().isEmpty) {
-          println("\n\tFile: " + path + ":")
-          newDiff.getChanges().map((i, o, c) => println("\t\t" + o.toString + ": '" + c + "' at line " + i))
+//          println("\n\tFile: " + path + ":")
+//          newDiff.getChanges().map((i, o, c) => println("\t\t" + o.toString + ": '" + c + "' at line " + i))
+          println("\tChanged:\t" + path)
         }
       }
     }
@@ -111,18 +110,17 @@ class VCS(val sourcePath : String):
       val structureDiff: StructureDiff = StructureDiff.generateDiff(currentCommit.structureDiff)
       StructureDiff.generateDiff(currentCommit.structureDiff)
 
-      println("Added and deleted files:")
+      println("All current changes compared to last commit:")
       println(structureDiff.getString())
-      println("")
-      println("Changes in files:")
 
       for(path <- files)
       {
         val newDiff : FileDiff = FileDiff(path, currentCommit.getDiffForFile(path))
         newDiff.generateDiff()
         if(!newDiff.getChanges().isEmpty) {
-          println("\n\tFile: " + path + ":")
-          newDiff.getChanges().map((i, o, c) => println("\t\t" + o.toString + ": '" + c + "' at line " + i))
+//          println("\n\tFile: " + path + ":")
+//          newDiff.getChanges().map((i, o, c) => println("\t\t" + o.toString + ": '" + c + "' at line " + i))
+          println("\tChanged:\t" + path)
         }
       }
     }
@@ -265,7 +263,28 @@ class VCS(val sourcePath : String):
 
   }
 
-  
+  /*
+
+  */
+  def showDiff(args : Array[String]) : Unit = {
+    println("\nAll changes of file: " + args(0) + "\n")
+    val path: String = sourcePath + "/" + args(0)
+    val file: File = new File(path)
+
+    if (!file.exists() || !file.isFile) {
+      println("File does not exist!")
+      return
+    }
+
+    val newDiff: FileDiff = FileDiff(path, if (currentCommit != null) currentCommit.getDiffForFile(path) else FileDiff(path, null))
+    newDiff.generateDiff()
+    if (!newDiff.getChanges().isEmpty) {
+      println("File: " + path + ":")
+      newDiff.getChanges().map((i, o, c) => println("\t" + o.toString + ": '" + c + "' at line " + i))
+    }
+
+    println("")
+  }
 
   /*
     Saves the staging area as a text document in the vcss directory

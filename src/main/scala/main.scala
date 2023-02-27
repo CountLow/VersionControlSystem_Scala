@@ -20,6 +20,7 @@ object VCS_S {
       case "commit" => vcs.commitChanges()
       case "status" => vcs.status()
       case "checkout" => vcs.checkoutVersion(args(1))
+      case "diff" => vcs.showDiff(args.drop(1))
       case _ => printHelp()
   }
 

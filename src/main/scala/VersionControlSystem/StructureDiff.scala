@@ -20,16 +20,16 @@ class StructureDiff(val sourcePath : String, val previousDiff : StructureDiff = 
   def getString() : String =
   {
     val sB : StringBuilder = StringBuilder("")
-    sB ++= addedDirectories.map(f => "\tAdded:\t\t" + f).mkString("\n")
+    sB ++= addedDirectories.map(f => "\tAdded:\t" + f).mkString("\n")
     if (addedDirectories.length > 0) sB ++= "\n"
 
-    sB ++= deletedDirectories.map(f => "\tDeleted:\t\t" + f).mkString("\n")
+    sB ++= deletedDirectories.map(f => "\tDeleted:\t" + f).mkString("\n")
     if (deletedDirectories.length > 0) sB ++= "\n"
 
-    sB ++= addedFiles.map(f => "\tAdded:\t\t" + f).mkString("\n")
+    sB ++= addedFiles.map(f => "\tAdded:\t" + f).mkString("\n")
     if (addedFiles.length > 0) sB ++= "\n"
 
-    sB ++= deletedFiles.map(f => "\tDeleted:\t\t" + f).mkString("\n")
+    sB ++= deletedFiles.map(f => "\tDeleted:\t" + f).mkString("\n")
     if (deletedFiles.length > 0) sB ++= "\n"
 
     sB.toString()
