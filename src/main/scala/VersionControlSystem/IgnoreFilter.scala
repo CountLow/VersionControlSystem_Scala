@@ -9,6 +9,9 @@ import collection.mutable
 */
 
 class IgnoreFilter(val paths : Array[String], val fileTypes : Array[String]):
+  /*
+    returns whether a file with the specified path should be ignored
+  */
   def shouldIgnore(path : String) : Boolean =
   {
     var ignored : Boolean = false
@@ -30,6 +33,10 @@ class IgnoreFilter(val paths : Array[String], val fileTypes : Array[String]):
 
 
 object IgnoreFilter:
+  /*
+    generates an Ignore filter from a file of form:
+      path : filepath
+  */
   def generateFromFile(sourcePath : String) : IgnoreFilter =
   {
     if(!new File(sourcePath + "/.vcss/.vcssIgnore").exists())
