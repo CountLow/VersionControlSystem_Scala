@@ -31,7 +31,7 @@ class VCS(val sourcePath : String):
     val versionHistoryFile : File = new File(sourcePath + "/.vcss/versionHistory")
     if(versionHistoryFile.exists())
     {
-      println("Repository already initialized!")
+      println("\nRepository already initialized!\n")
       return
     }
     else
@@ -52,7 +52,7 @@ class VCS(val sourcePath : String):
     versionHistory.commitChanges(commit)
     VersionHistory.saveVersionHistory(versionHistory, sourcePath + "/.vcss")
 
-    println("Initialized vcss repository.")
+    println("\nInitialized vcss repository.\n")
 
     // Create .vcssIgnore
     val vcssIgnore : File = new File(sourcePath + "/.vcss/.vcssIgnore")
@@ -67,28 +67,67 @@ class VCS(val sourcePath : String):
   */
   def status() : Unit =
   {
+    val files: collection.mutable.Set[String] = collection.mutable.Set()
+
+    val unsearched: Stack[File] = Stack(new File(sourcePath))
+
+    while (unsearched.nonEmpty) {
+      if (unsearched.top.isFile && !ignoreFilter.shouldIgnore(unsearched.top.getAbsolutePath))
+        files.add(unsearched.pop.getPath)
+      else if (unsearched.top.isDirectory && !ignoreFilter.shouldIgnore(unsearched.top.getAbsolutePath)) {
+        unsearched.pushAll(unsearched.pop.listFiles())
+      }
+      else {
+        unsearched.pop()
+      }
+    }
+
     if(currentCommit.isHead)
     {
-      println("\nNot commited anything yet")
+      println("\nNot commited anything yet\n")
 
-//      val fileDiffs: List[FileDiff] =
+
       val dummyStructureDiff : StructureDiff = StructureDiff(sourcePath, null)
       val structureDiff: StructureDiff = StructureDiff.generateDiff(dummyStructureDiff)
 
+      println("Added and deleted files:")
       print(structureDiff.getString())
+      println("")
+      println("Changes in files:")
+
+      for(path <- files)
+      {
+        val dummyDiff : FileDiff = FileDiff(path, null)
+        val newDiff : FileDiff = FileDiff(path, dummyDiff)
+        newDiff.generateDiff()
+        if(!newDiff.getChanges().isEmpty) {
+          println("\n\tFile: " + path + ":")
+          newDiff.getChanges().map((i, o, c) => println("\t\t" + o.toString + ": '" + c + "' at line " + i))
+        }
+      }
     }
     else {
-      println("\nCurrent commit: " + currentCommit.identifier)
-      val fileDiffs: Array[FileDiff] = currentCommit.fileDiffs
+      println("\nCurrent commit: " + currentCommit.identifier + "\n")
       val structureDiff: StructureDiff = StructureDiff.generateDiff(currentCommit.structureDiff)
       StructureDiff.generateDiff(currentCommit.structureDiff)
 
       println("Added and deleted files:")
       println(structureDiff.getString())
+      println("")
       println("Changes in files:")
 
-
+      for(path <- files)
+      {
+        val newDiff : FileDiff = FileDiff(path, currentCommit.getDiffForFile(path))
+        newDiff.generateDiff()
+        if(!newDiff.getChanges().isEmpty) {
+          println("\n\tFile: " + path + ":")
+          newDiff.getChanges().map((i, o, c) => println("\t\t" + o.toString + ": '" + c + "' at line " + i))
+        }
+      }
     }
+
+    println("")
   }
 
   /*
@@ -135,6 +174,7 @@ class VCS(val sourcePath : String):
     stagingArea.map(f => println("\t" + f))
 
     saveStagingArea()
+    println("")
   }
 
   /*
@@ -170,7 +210,7 @@ class VCS(val sourcePath : String):
     Commit.saveToFile(commit, commitDirectory, commit.identifier)
 
     currentCommit = commit
-    println("New commit: " + commit.identifier)
+    println("\nCreated new commit with identifier: " + commit.identifier + "\n")
     versionHistory.commitChanges(commit)
     VersionHistory.saveVersionHistory(versionHistory, sourcePath + "/.vcss")
 
@@ -188,12 +228,12 @@ class VCS(val sourcePath : String):
 
     // Load commit
     val commit : Commit = versionHistory.getCommitById(commitName)
-    println("Commit is: " + commit)
+    println("\nChecking out commit: " + commit.identifier + "\n")
 
     // Delete and add all changed files
     val structureDiff : StructureDiff = StructureDiff.generateDiff(commit.structureDiff)
-    println("Deleted directories: " + structureDiff.deletedDirectories)
-    println("Deleted files: " + structureDiff.deletedFiles)
+//    println("Deleted directories: " + structureDiff.deletedDirectories)
+//    println("Deleted files: " + structureDiff.deletedFiles)
 
     for (dD <- structureDiff.deletedDirectories)
       new File(dD).mkdir()
@@ -211,13 +251,12 @@ class VCS(val sourcePath : String):
     for(fileDiff <- commit.fileDiffs)
     {
       val file : File = new File(fileDiff.sourcePath)
-      println(fileDiff.sourcePath)
-      println(fileDiff.getChanges())
+//      println(fileDiff.sourcePath)
+//      println(fileDiff.getChanges())
 
       if(file.exists())
       {
         val content : String = fileDiff.generateVersion(fileDiff).toString
-        println(content)
         val fileWriter : FileWriter = FileWriter(file)
         fileWriter.write(content)
         fileWriter.close()
@@ -225,6 +264,9 @@ class VCS(val sourcePath : String):
     }
 
   }
+
+  
+
   /*
     Saves the staging area as a text document in the vcss directory
   */

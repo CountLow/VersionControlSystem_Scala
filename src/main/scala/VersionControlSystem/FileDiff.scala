@@ -44,7 +44,7 @@ class FileDiff(val sourcePath : String, val previousDiff : FileDiff = null) exte
         }
         else // Insertion
         {
-          addChange(index, Operation.Insertion, tempContent)
+          addChange(index, Operation.Insertion, tempContent.mkString("\n"))
         }
       }
     }
@@ -68,8 +68,8 @@ class FileDiff(val sourcePath : String, val previousDiff : FileDiff = null) exte
 
       var changes: List[(Int, Operation, String)] = fileDiff.getChanges()
 
-      if(changes == null)
-        return new StringBuffer()
+      if(changes == null || changes.isEmpty)
+        return new StringBuffer(previousContent)
 
       var (index, operation, content): (Int, Operation, String) = changes.head
       changes = changes.tail
@@ -115,11 +115,6 @@ class FileDiff(val sourcePath : String, val previousDiff : FileDiff = null) exte
   def addChange(index : Int, operation: Operation, content : String) : Unit =
   {
     changes = changes :+ (index, operation, content)
-  }
-
-  def addChange(index: Int, operation: Operation, content: List[String]): Unit = {
-    for(c <- content)
-      changes = changes :+ (index, operation, c)
   }
 
   // returns changes as a string

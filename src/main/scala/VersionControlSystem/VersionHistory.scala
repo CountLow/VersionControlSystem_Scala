@@ -40,7 +40,7 @@ object VersionHistory:
   */
   def loadVersionHistory(vcssPath : String) : VersionHistory = {
     if(!new File(vcssPath + "/versionHistory").exists()) {
-      println("Version History not found")
+//      println("Version History not found")
       return null
     }
 
