@@ -14,6 +14,7 @@ class FileDiff(val sourcePath : String, val previousDiff : FileDiff = null) exte
   */
   def generateDiff() : Unit =
   {
+//    println("Reading file: " + sourcePath)
     val bRFile : BufferedReader = io.Source.fromFile(sourcePath).bufferedReader()
     val prevVersion : StringBuffer = generateVersion(previousDiff)
     val bRPrev : BufferedReader = BufferedReader(StringReader(prevVersion.toString))
@@ -30,7 +31,7 @@ class FileDiff(val sourcePath : String, val previousDiff : FileDiff = null) exte
       if (stringA != stringB) {
         var tempContent: List[String] = List()
 
-        while (stringA != stringB && stringB != null && tempContent.length < 20) // Abort if temporary list exceeds certain size
+        while (stringA != stringB && stringB != null /*&& tempContent.length < 20*/) // Abort if temporary list exceeds certain size
         {
           tempContent = tempContent :+ stringB
           stringB = bRFile.readLine()
@@ -66,6 +67,10 @@ class FileDiff(val sourcePath : String, val previousDiff : FileDiff = null) exte
       val stringBuffer: StringBuffer = new StringBuffer()
 
       var changes: List[(Int, Operation, String)] = fileDiff.getChanges()
+
+      if(changes == null)
+        return new StringBuffer()
+
       var (index, operation, content): (Int, Operation, String) = changes.head
       changes = changes.tail
 
