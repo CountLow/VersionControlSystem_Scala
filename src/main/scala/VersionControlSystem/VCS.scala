@@ -208,10 +208,6 @@ class VCS(val sourcePath : String):
       new File(aD).delete()
 
 
-//    var fileVersions : Array[List[(Int,Operation,String)]] = commit.fileDiffs.map((x) => x.getChanges())
-//    //flip Operation
-//    fileVersions = fileVersions.map((x) => x.map((y) => if (y._2 == Operation.Insertion) (y._1, Operation.Deletion, y._3) else (y._1, Operation.Insertion, y._3)))
-
     for(fileDiff <- commit.fileDiffs)
     {
       val file : File = new File(fileDiff.sourcePath)

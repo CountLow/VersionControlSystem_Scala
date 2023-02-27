@@ -26,10 +26,11 @@ object VCS_S {
   private def printHelp() : Unit = {
     println("Possible commands:")
     println("   init                            Initialize vcss for this folder")
-    println("   diff [PATH]                     Show the differences for a file")
+    //println("   diff [PATH]                     Show the differences for a file")
     println("   stage [PATH_A] [PATH_B] [...]   Stage specified files for commit")
     println("   commit                          Commit all staged changes to create a new version")
     println("   status                          Show the status of the folder")
+    println("   checkout [NUMBER]               Checkout previous commit")
     println("   ")
   }
 }
