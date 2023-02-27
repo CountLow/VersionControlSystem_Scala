@@ -221,6 +221,7 @@ class VCS(val sourcePath : String):
       if(file.exists())
       {
         val content : String = fileDiff.generateVersion(fileDiff).toString
+        println(content)
         val fileWriter : FileWriter = FileWriter(file)
         fileWriter.write(content)
         fileWriter.close()
